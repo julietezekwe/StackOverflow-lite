@@ -1,0 +1,314 @@
+*{
+	font-family: Trebuchet MS;
+}
+body{
+	position: relative;
+	margin: 0;
+  	padding-bottom: 6rem;
+  	min-height: 100%;
+}
+ul, li, h3{
+	margin: 0;
+	padding: 0;
+}
+p, li, h1{
+	color: #4e4e4e;
+}
+a{
+	text-decoration: none;
+}
+li{
+    list-style-type: none;
+}
+hr{
+	border-color: #8e8d8d29;
+}
+/* CONTAINER */
+.container{
+	width: 96%;
+	padding: 0 2%;
+}
+.container-fluid{
+	width: 100%;
+}
+.row{
+	display: grid;
+	grid-template-columns: repeat(12, 1fr);
+	grid-gap: 10px;
+}
+
+/* HEADER */
+header{
+    padding: 0;
+}
+.nav{
+	display: flex;
+	flex-wrap: wrap;
+	padding: 20px
+}
+.brand-logo{
+	margin-right: auto;
+}
+
+.nav li:not(:last-child):not(.brand-logo) {
+  margin-right: 30px;
+}
+
+.nav li:not(.brand-logo) {
+  padding-top: 10px;
+}
+
+.nav li a{
+	color: #fff;
+}
+
+.nav li a:hover{
+	color: #eee;
+}
+
+.top-questions{
+    border-bottom: 1px solid #eee;
+}
+.top-questions .question a{
+	color: #174c61;
+	font-size: 17px;
+}
+footer {
+  position: absolute;
+  padding: 1rem;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+}
+footer p{
+	margin: 0;
+}
+.accept-answer{
+	color: #0192ca;
+    background: gainsboro;
+    padding: 2px;
+}
+.accept-answer:hover{
+	text-decoration: underline;
+}
+
+/* CUSTOM CLASSES */
+.btn{
+	padding: 10px;
+	border: 1px;
+	background: #0192ca;
+	color: white;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.btn-lg{
+	height: 50px;
+}
+.pull-right{
+	justify-self: end;
+}
+.p-10{
+	padding: 10px;
+}
+.pl-r5{
+	padding: 0 5%;
+}
+.lh-2{
+	line-height: 2;
+}
+
+.align-right{
+	text-align: right;
+}
+
+.align-center{
+	text-align: center;
+}
+.min-h{
+	min-height: 73vh;
+}
+.bb-grey{
+	border-bottom: 1px solid #cecece;
+}
+
+.mb-10{
+	margin-bottom: 10px;
+}
+      
+.mb-5{
+	margin-bottom: 5px;
+}
+.text-italic{
+	font-style: italic;
+}
+.mt-0{
+	margin-top: 0;
+}
+.mt-20{
+	margin-top: 20px;
+}
+.form-center{
+	margin: 3% auto;
+}
+.form-50{
+	width: 50%;
+}
+.text-bold{
+	font-weight: bold;
+}
+.form{
+    border: 1px solid #eae5e5;
+    padding: 20px;
+}
+.mb-0{
+	margin-bottom: 0;
+}
+.background{
+	background: #3bbced;
+}
+.asked{
+	color: #4e5152;
+}
+.color-dodger{
+	color: dodgerblue;
+}
+.btn-full{
+	width: 100%;
+}
+.btn-half{
+	width: 50%;
+}
+.font-24{
+	font-size: 24px;
+}
+.box-shadow{
+	padding: 20px;
+	margin-bottom: 30px;
+	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+	transition: all 0.3s ease;
+}
+.box-shadow:hover {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.25), 0 3px 3px rgba(0,0,0,0.22);
+}
+.box{
+	box-shadow: 0 3px 6px rgba(0,0,0,0.25), 0 3px 3px rgba(0,0,0,0.22);
+}
+.label-accepted{
+    border-radius: 30px;
+    padding: 8px;
+    color: #fff;
+    background: green;
+    margin-top: 44%;
+    text-align: center;
+}
+.form-control{
+    width: 95%;
+    padding: 15px;
+    margin: 20px 0 22px 0;
+    display: inline-block;
+    border: none;
+    border-radius: 5px;
+    background: #f1f1f1;
+}
+.form-control:focus {
+    background-color: #ddd;
+    outline-color: #3bbced;
+}
+
+.grid-md-3{
+    grid-column: span 3;
+}
+.grid-md-4{
+    grid-column: span 4;
+}
+.grid-md-6{
+    grid-column: span 6;
+}
+.grid-md-8{
+    grid-column: span 8;
+}
+.grid-md-9{
+    grid-column: span 9;
+}
+.grid-md-10{
+    grid-column: span 10;
+}
+.grid-md-12{
+    grid-column: span 12;
+}
+
+
+@media screen and (min-width: 768px){
+	.grid-md-none{
+		display: none;
+    }
+}
+
+@media screen and (max-width: 768px){
+	.grid-sm-12{
+		grid-column: span 12;
+	}
+	.grid-sm-6{
+	grid-column: span 6;
+	}
+
+	.grid-sm-9{
+		grid-column: span 9;
+	}
+
+	.grid-sm-8{
+		grid-column: span 8;
+	}
+
+	.grid-sm-3{
+		grid-column: span 3;
+	}
+
+	.grid-sm-4{
+		grid-column: span 4;
+	}
+}
+
+@media screen and (max-width: 490px){
+	.grid-xs-12{
+		grid-column: span 12;
+	}
+	.grid-xs-6{
+	grid-column: span 6;
+	}
+
+	.grid-xs-9{
+		grid-column: span 9;
+	}
+
+	.grid-xs-8{
+		grid-column: span 8;
+	}
+	.grid-xs-7{
+		grid-column: span 7;
+	}
+	.grid-xs-5{
+		grid-column: span 5;
+	}
+
+	.grid-xs-3{
+		grid-column: span 3;
+	}
+
+	.grid-xs-4{
+		grid-column: span 4;
+	}
+
+	.form-control {
+	  width: 83%;
+	}
+	.grid-xs-none{
+		display: none;
+	}
+
+	.label-accepted{
+	    margin-top: 2%;
+	    width: 20%;
+	}
+}

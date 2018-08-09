@@ -284,6 +284,9 @@ footer p{
 	.form-center {
 		margin: 18% auto;
 	}
+	.form-sm-width{
+		width: 50%;
+	}
 }
 
 @media screen and (max-width: 490px){

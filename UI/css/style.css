@@ -118,6 +118,9 @@ footer p{
 .p-10{
 	padding: 10px;
 }
+.mb-20{
+	margin-bottom: 20px;
+}
 .p-20{
 	padding: 20px;
 }
@@ -217,7 +220,6 @@ footer p{
     padding: 8px;
     color: #fff;
     background: green;
-    margin-top: 44%;
     text-align: center;
 }
 .form-control{

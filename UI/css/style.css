@@ -97,9 +97,19 @@ footer p{
 }
 
 /* CUSTOM CLASSES */
-.fixed {
-	position: fixed;
-	/* padding: 1rem; */
+.flex {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.mr-auto{
+	margin-right: auto;
+}
+.mr-20{
+	margin-right: 20px;
+}
+.flex-30{
+	flex-basis: 30px;
 }
 .btn{
 	padding: 10px;

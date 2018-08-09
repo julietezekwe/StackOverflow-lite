@@ -47,7 +47,7 @@ header{
 .nav{
 	display: flex;
 	flex-wrap: wrap;
-	padding: 20px
+	padding: 5px 20px
 }
 .brand-logo{
 	margin-right: auto;
@@ -164,6 +164,9 @@ footer p{
 .form-70{
 	width: 70%;
 }
+.form-33{
+	width: 33%;
+}
 .text-bold{
 	font-weight: bold;
 }
@@ -213,8 +216,8 @@ footer p{
     text-align: center;
 }
 .form-control{
-    width: 95%;
-    padding: 15px;
+    width: 96%;
+    padding: 15px 2%;
     margin: 20px 0 22px 0;
     display: inline-block;
     border: none;
@@ -311,10 +314,6 @@ footer p{
 
 	.grid-xs-4{
 		grid-column: span 4;
-	}
-
-	.form-control {
-	  width: 83%;
 	}
 	.grid-xs-none{
 		display: none;

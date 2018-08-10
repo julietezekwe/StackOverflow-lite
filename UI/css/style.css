@@ -128,6 +128,9 @@ footer p{
 .p-10{
 	padding: 10px;
 }
+.pb-10{
+	padding-bottom: 10px;
+}
 .mb-20{
 	margin-bottom: 20px;
 }

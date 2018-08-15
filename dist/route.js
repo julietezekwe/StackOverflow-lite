@@ -20,4 +20,11 @@ router.get('/', function (req, res) {
     res.status(200).json(question.getAllQuestions());
 });
 
+router.get('/:id', function (req, res) {
+    var id = req.params.id;
+    var question = new _question.QuestionController();
+    var selected = question.getQuestion(id);
+    res.status(200).json(selected);
+});
+
 exports.router = router;

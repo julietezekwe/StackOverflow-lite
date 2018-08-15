@@ -25,6 +25,14 @@ var QuestionController = exports.QuestionController = function () {
         value: function getAllQuestions() {
             return _store2.default;
         }
+    }, {
+        key: 'getQuestion',
+        value: function getQuestion(id) {
+            var question = _store2.default.find(function (item) {
+                return item.id === parseInt(id);
+            });
+            return question ? question : false;
+        }
     }]);
 
     return QuestionController;

@@ -4,17 +4,27 @@ export class QuestionController {
         return store;
     }
     getQuestion(id) {
-        const question = store.find((item) => item.id === parseInt(id));
-        return (question) ? question : false;
+        const data = this.findQuestion(id);
+        return (data) ? data : false;
     }
     addQuestion(title, context) {
-        const question = {
-            id: store.length + 1,
+        const data = this.createQuestionObject(title, context);
+        store.push(data);
+        return data;
+    }
+    findQuestion(id) {
+        return store.find((item) => item.id === parseInt(id))
+    }
+    getId() {
+        return (store.length + 1); 
+    }
+    createQuestionObject(title, context) {
+        const id = this.getId();
+        return {
+            id,
             title,
             context,
             answers: []
         }
-        store.push(question);
-        return question;
     }
 }

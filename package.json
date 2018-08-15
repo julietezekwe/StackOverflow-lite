@@ -1,0 +1,27 @@
+{
+  "name": "StackOverflow-lite",
+  "version": "1.0.0",
+  "description": "Andela Developer Challenge: StackOverflow-lite is a platform where people can ask questions and provide answers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Steelze/StackOverflow-lite.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Steelze/StackOverflow-lite/issues"
+  },
+  "homepage": "https://github.com/Steelze/StackOverflow-lite#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
+  }
+}

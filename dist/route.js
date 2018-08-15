@@ -11,6 +11,8 @@ var _express2 = _interopRequireDefault(_express);
 
 var _question = require('./controller/question');
 
+var _answer = require('./controller/answer');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -28,11 +30,18 @@ router.get('/:id', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-
     var title = req.body.title;
     var body = req.body.context;
     var question = new _question.QuestionController();
     var selected = question.addQuestion(title, body);
+    res.status(200).json(selected);
+});
+
+router.post('/:id/answers', function (req, res) {
+    var id = req.params.id;
+    var data = req.body.data;
+    var answer = new _answer.AnswerController();
+    var selected = answer.addAnswer(id, data);
     res.status(200).json(selected);
 });
 

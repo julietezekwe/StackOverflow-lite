@@ -16,7 +16,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    
+
     const title = req.body.title;
     const body = req.body.context;
     const question = new QuestionController();

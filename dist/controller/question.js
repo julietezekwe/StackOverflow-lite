@@ -33,6 +33,18 @@ var QuestionController = exports.QuestionController = function () {
             });
             return question ? question : false;
         }
+    }, {
+        key: 'addQuestion',
+        value: function addQuestion(title, context) {
+            var question = {
+                id: _store2.default.length + 1,
+                title: title,
+                context: context,
+                answers: []
+            };
+            _store2.default.push(question);
+            return question;
+        }
     }]);
 
     return QuestionController;

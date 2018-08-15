@@ -27,4 +27,13 @@ router.get('/:id', function (req, res) {
     res.status(200).json(selected);
 });
 
+router.post('/', function (req, res) {
+
+    var title = req.body.title;
+    var body = req.body.context;
+    var question = new _question.QuestionController();
+    var selected = question.addQuestion(title, body);
+    res.status(200).json(selected);
+});
+
 exports.router = router;

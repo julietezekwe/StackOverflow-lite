@@ -15,4 +15,13 @@ router.get('/:id', (req, res) => {
     res.status(200).json(selected);
 });
 
+router.post('/', (req, res) => {
+    
+    const title = req.body.title;
+    const body = req.body.context;
+    const question = new QuestionController();
+    const selected = question.addQuestion(title, body);
+    res.status(200).json(selected);
+});
+
 export { router };

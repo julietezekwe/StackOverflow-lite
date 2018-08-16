@@ -75,7 +75,4 @@ describe('Add a questions', function() {
             res.body.should.have.all.keys('error');
         });
     });
-    after(function() {
-        process.exit();
-    })
 });

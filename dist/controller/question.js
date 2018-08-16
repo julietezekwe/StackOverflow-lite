@@ -10,6 +10,10 @@ var _store = require('../model/store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _error = require('./error');
+
+var _error2 = _interopRequireDefault(_error);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -28,9 +32,10 @@ var QuestionController = function () {
     }
   }, {
     key: 'getQuestion',
-    value: function getQuestion(id) {
+    value: function getQuestion(id, next) {
+      if (isNaN(id)) next(new _error2.default('Invalid Parameter', 400));
       var data = this.findQuestion(id);
-      return data || false;
+      return data || next(new _error2.default('Resource Not Found', 404));
     }
   }, {
     key: 'addQuestion',

@@ -10,10 +10,10 @@ router.get('/', (req, res) => {
   res.status(200).json(question.getAllQuestions());
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
   const { id } = req.params;
   const question = new QuestionController();
-  res.status(200).json(question.getQuestion(id));
+  res.status(200).json(question.getQuestion(id, next));
 });
 
 router.post('/', (req, res) => {
@@ -28,6 +28,5 @@ router.post('/:id/answers', (req, res) => {
   const answer = new AnswerController();
   res.status(201).json(answer.addAnswer(id, input));
 });
-
 
 export default router;

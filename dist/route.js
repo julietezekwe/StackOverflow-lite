@@ -25,11 +25,11 @@ router.get('/', function (req, res) {
   res.status(200).json(question.getAllQuestions());
 });
 
-router.get('/:id', function (req, res) {
+router.get('/:id', function (req, res, next) {
   var id = req.params.id;
 
   var question = new _question2.default();
-  res.status(200).json(question.getQuestion(id));
+  res.status(200).json(question.getQuestion(id, next));
 });
 
 router.post('/', function (req, res) {

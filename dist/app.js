@@ -17,7 +17,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var app = (0, _express2.default)();
 var baseUrl = '/api/v1/questions';
 app.use(_express2.default.json());
+
 app.use(baseUrl, _route2.default);
+
+app.use(function (req, res, next) {
+  var err = new Error('No Route Match Found');
+  err.status = 404;
+  next(err);
+});
+
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500).json({
+    error: {
+      message: err.message
+    }
+  });
+});
 var port = process.env.PORT || 3000;
 var address = app.listen(port, function () {
   return console.log('Listening on port ' + port + '...');

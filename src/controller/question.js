@@ -1,4 +1,5 @@
 import store from '../model/store';
+import ErrorHandler from './error';
 
 export default class QuestionController {
   constructor() {
@@ -9,9 +10,10 @@ export default class QuestionController {
     return this.store;
   }
 
-  getQuestion(id) {
+  getQuestion(id, next) {
+    if (Number.isNaN(id)) next(new ErrorHandler('Invalid Request', 400));
     const data = this.findQuestion(id);
-    return (data) || false;
+    return (data) || next(new ErrorHandler('Resource Not Found', 404));
   }
 
   addQuestion(title, context) {

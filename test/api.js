@@ -28,4 +28,51 @@ describe('Fetch all questions', function() {
             res.body.should.have.all.keys('error');
         });
     });
+    it('respond with 400 error', function() {
+        request(app).get('/api/v1/questions/1f')
+        .end(function(err, res) {
+            res.should.have.property('status', 400);
+            res.body.should.be.a('object');
+            res.body.should.have.all.keys('error');
+        });
+    });
+});
+
+describe('Add a questions', function() {
+    it('respond with json containing question added', function() {
+        request(app).post('/api/v1/questions')
+        .send({
+            title: "Mocha Test Question",
+            context: "Mocha Test Body of Question Ok!"
+        })
+        .end(function(err, res) {
+            res.should.have.property('status', 201);
+            res.body.should.be.a('object');
+            res.body.should.have.all.keys('id', 'title', 'context', 'answers');
+        });
+    });
+    it('respond with 400 error', function() {
+        request(app).post('/api/v1/questions')
+        .send({
+            title: "",
+            context: ""
+        })
+        .end(function(err, res) {
+            res.should.have.property('status', 400);
+            res.body.should.be.a('object');
+            res.body.should.have.all.keys('error');
+        });
+    });
+    it('respond with 400 error', function() {
+        request(app).post('/api/v1/questions')
+        .send({
+            foo: "Lorem Ipsum",
+            bar: "Grace ipsum"
+        })
+        .end(function(err, res) {
+            res.should.have.property('status', 400);
+            res.body.should.be.a('object');
+            res.body.should.have.all.keys('error');
+        });
+    });
 });

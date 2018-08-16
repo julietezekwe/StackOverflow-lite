@@ -11,7 +11,7 @@ export default class QuestionController {
   }
 
   getQuestion(id, next) {
-    if (Number.isNaN(id)) next(new ErrorHandler('Invalid Request', 400));
+    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
     const data = this.findQuestion(id);
     return (data) || next(new ErrorHandler('Resource Not Found', 404));
   }

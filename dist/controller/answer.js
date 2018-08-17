@@ -37,11 +37,13 @@ var AnswerController = function () {
       return res.status(201).json(data);
     }
   }, {
-    key: 'findQuestion',
-    value: function findQuestion(id) {
-      return this.store.find(function (item) {
-        return item.id === parseInt(id, 10);
-      });
+    key: 'acceptAnswer',
+    value: function acceptAnswer(id, answerId, res, next) {
+      if (Number.isNaN(Number(id)) || Number.isNaN(Number(answerId))) return next(new _error2.default('Invalid Request', 400));
+      this.activeQuestion = this.findQuestion(id);
+      if (!this.activeQuestion || !this.checkAnswerId(answerId)) return next(new _error2.default('Resource Not Found', 404));
+      this.activeQuestion.selected = answerId;
+      return res.status(200).json(this.activeQuestion);
     }
   }, {
     key: 'createAnswerObject',
@@ -53,9 +55,23 @@ var AnswerController = function () {
       };
     }
   }, {
+    key: 'findQuestion',
+    value: function findQuestion(id) {
+      return this.store.find(function (item) {
+        return item.id === parseInt(id, 10);
+      });
+    }
+  }, {
     key: 'getId',
     value: function getId() {
       return this.activeQuestion.answers.length + 1;
+    }
+  }, {
+    key: 'checkAnswerId',
+    value: function checkAnswerId(id) {
+      return this.activeQuestion.answers.some(function (item) {
+        return item.id === id;
+      });
     }
   }]);
 

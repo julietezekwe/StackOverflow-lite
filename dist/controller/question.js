@@ -85,7 +85,8 @@ var QuestionController = function () {
         id: id,
         title: title,
         context: context,
-        answers: []
+        answers: [],
+        selected: null
       };
     }
   }]);

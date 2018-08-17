@@ -56,6 +56,7 @@ export default class QuestionController {
       title,
       context,
       answers: [],
+      selected: null,
     };
   }
 }

@@ -19,7 +19,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 200);
                     res.body.should.be.a('array');
-                    res.body[0].should.have.all.keys('id', 'title', 'context', 'answers');
+                    res.body[0].should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
                 });
             });
             it('respond with selected question', function() {
@@ -27,7 +27,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 200);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id', 'title', 'context', 'answers');
+                    res.body.should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
                 });
             });
             it('respond with question not found', function() {
@@ -61,7 +61,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 201);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id', 'title', 'context', 'answers');
+                    res.body.should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
                 });
             });
             it('respond with invalid request for empty body data', function() {
@@ -111,7 +111,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 200);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id', 'title', 'context', 'answers');
+                    res.body.should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
                 });
             });
             it('respond with invalid request for empty body data', function() {

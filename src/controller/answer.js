@@ -7,13 +7,13 @@ export default class AnswerController {
     this.activeQuestion = null;
   }
 
-  addAnswer(id, answer, next) {
+  addAnswer(id, answer, res, next) {    
     if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
     this.activeQuestion = this.findQuestion(id);
     if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
     const data = this.createAnswerObject(answer);
     this.activeQuestion.answers.push(data);
-    return data;
+    return res.status(201).json(data);
   }
 
   findQuestion(id) {

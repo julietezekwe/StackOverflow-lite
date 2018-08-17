@@ -11,12 +11,6 @@ router.get('/', (req, res) => {
   res.status(200).json(question.getAllQuestions());
 });
 
-router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const question = new QuestionController();
-  res.status(200).json(question.getQuestion(id, next));
-});
-
 router.post('/', (req, res, next) => {
   const { title, context } = req.body;
   if (!title || !context) return next(new ErrorHandler('Invalid Request', 400));
@@ -24,11 +18,18 @@ router.post('/', (req, res, next) => {
   res.status(201).json(question.addQuestion(title, context));
 });
 
+router.get('/:id', (req, res, next) => {
+  const { id } = req.params;
+  const question = new QuestionController();
+  res.status(200).json(question.getQuestion(id, next));
+});
+
 router.post('/:id/answers', (req, res, next) => {
   const { id } = req.params;
   const { answer: input } = req.body;
+  if (!input) return next(new ErrorHandler('Invalid Request', 400));
   const answer = new AnswerController();
-  res.status(201).json(answer.addAnswer(id, input, next));
+  return answer.addAnswer(id, input, res, next);
 });
 
 export default router;

@@ -4,7 +4,7 @@
   "description": "Andela Developer Challenge: StackOverflow-lite is a platform where people can ask questions and provide answers.",
   "main": "index.js",
   "scripts": {
-    "build": "babel src -d dist && babel --presets env src -d dist",
+    "build": "babel src -d dist",
     "lint": "eslint ./src",
     "test": "mocha",
     "cover": "istanbul cover node_modules/mocha/bin/_mocha",

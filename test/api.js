@@ -29,15 +29,15 @@ describe('Test api requests', function() {
                 res.body.should.have.all.keys('id', 'title', 'context', 'answers');
             });
         });
-        it('respond with 404 error', function() {
-            request(app).get('/api/v1/questions/54')
+        it('respond with question not found', function() {
+            request(app).get('/api/v1/questions/50094')
             .end(function(err, res) {
                 res.should.have.property('status', 404);
                 res.body.should.be.a('object');
                 res.body.should.have.all.keys('error');
             });
         });
-        it('respond with 400 error', function() {
+        it('respond with invalid request', function() {
             request(app).get('/api/v1/questions/1f')
             .end(function(err, res) {
                 res.should.have.property('status', 400);
@@ -60,7 +60,7 @@ describe('Test api requests', function() {
                 res.body.should.have.all.keys('id', 'title', 'context', 'answers');
             });
         });
-        it('respond with 400 error', function() {
+        it('respond with invalid request for empty body data', function() {
             request(app).post('/api/v1/questions')
             .send({
                 title: "",
@@ -72,7 +72,7 @@ describe('Test api requests', function() {
                 res.body.should.have.all.keys('error');
             });
         });
-        it('respond with 400 error', function() {
+        it('respond with invalid request for bad body data', function() {
             request(app).post('/api/v1/questions')
             .send({
                 foo: "Lorem Ipsum",
@@ -80,6 +80,52 @@ describe('Test api requests', function() {
             })
             .end(function(err, res) {
                 res.should.have.property('status', 400);
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('error');
+            });
+        });
+    });
+    describe('Add an answer', function() {
+        it('respond with added answer object', function() {
+            request(app).post('/api/v1/questions/1/answers')
+            .send({
+                answer: "Mocha Test Answer",
+            })
+            .end(function(err, res) {
+                res.should.have.property('status', 201);
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('id','answer');
+            });
+        });
+        it('respond with invalid request for empty body data', function() {
+            request(app).post('/api/v1/questions/1/answers')
+            .send({
+                answer: ""
+            })
+            .end(function(err, res) {
+                res.should.have.property('status', 400);
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('error');
+            });
+        });
+        it('respond with invalid request for bad body data', function() {
+            request(app).post('/api/v1/questions/1/answers')
+            .send({
+                foo: "",
+            })
+            .end(function(err, res) {
+                res.should.have.property('status', 400);
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('error');
+            });
+        });
+        it('respond with question not found', function() {
+            request(app).post('/api/v1/questions/50094/answers')
+            .send({
+                answer: "Hi!",
+            })
+            .end(function(err, res) {
+                res.should.have.property('status', 404);
                 res.body.should.be.a('object');
                 res.body.should.have.all.keys('error');
             });

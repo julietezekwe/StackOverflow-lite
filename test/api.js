@@ -85,4 +85,8 @@ describe('Test api requests', function() {
             });
         });
     });
+    after(function (done) {
+        app.close();
+        done();
+    });
 });

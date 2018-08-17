@@ -6,8 +6,8 @@
   "scripts": {
     "build": "babel src -d dist && babel --presets env src -d dist",
     "lint": "eslint ./src",
-    "test": "mocha --exit",
-    "cover": "istanbul cover _mocha",
+    "test": "mocha",
+    "cover": "istanbul cover node_modules/mocha/bin/_mocha",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {

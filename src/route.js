@@ -32,4 +32,12 @@ router.post('/:id/answers', (req, res, next) => {
   return answer.addAnswer(id, input, res, next);
 });
 
+router.put('/:id', (req, res, next) => {
+  const { id } = req.params;
+  const { title, context } = req.body;
+  if (!title || !context) return next(new ErrorHandler('Invalid Request', 400));
+  const question = new QuestionController();
+  return question.updateQuestion(id, title, context, res, next);
+});
+
 export default router;

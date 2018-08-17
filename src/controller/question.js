@@ -4,6 +4,7 @@ import ErrorHandler from './error';
 export default class QuestionController {
   constructor() {
     this.store = store;
+    this.activeQuestion = null;
   }
 
   getAllQuestions() {
@@ -20,6 +21,15 @@ export default class QuestionController {
     const data = this.createQuestionObject(title, context);
     store.push(data);
     return data;
+  }
+
+  updateQuestion(id, title, context, res, next) {
+    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
+    this.activeQuestion = this.findQuestion(id);
+    if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
+    this.activeQuestion.title = title;
+    this.activeQuestion.context = context;
+    return res.status(200).json(this.activeQuestion);
   }
 
   findQuestion(id) {

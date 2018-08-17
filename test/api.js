@@ -155,6 +155,38 @@ describe('Test api requests', function() {
                 .end(done);
             });
         });
+        describe('Delete a question', function() {
+            before(function(done) {
+                request(app).post('/api/v1/questions')
+                .send({
+                    title: "Lorem Ipsum Title Gracias",
+                    context: "Lorem ipsum generato cos i'll rise up and do it a thousand times again"
+                })
+                .end(done);
+            })
+            it('respond with invalid request', function() {
+                request(app).get('/api/v1/questions/1f')
+                .end(function(err, res) {
+                    res.should.have.property('status', 400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.all.keys('error');
+                });
+            });
+            it('respond with delete succesfull status', function() {
+                request(app).delete('/api/v1/questions/1')
+                .end(function(err, res) {
+                    res.should.have.property('status', 204);
+                });
+            });
+            it('respond with question not found', function() {
+                request(app).delete('/api/v1/questions/50094')
+                .end(function(err, res) {
+                    res.should.have.property('status', 404);
+                    res.body.should.be.a('object');
+                    res.body.should.have.all.keys('error');
+                });
+            });
+        });
     })
     describe('Test answer routes', function() {
         before(function(done) {

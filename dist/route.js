@@ -77,7 +77,7 @@ router.post('/:id/answers/accept', function (req, res, next) {
   var id = req.params.id;
   var answerId = req.body.answer_id;
 
-  if (!id) return next(new _error2.default('Invalid Request', 400));
+  if (!id || !answerId) return next(new _error2.default('Invalid Request', 400));
   var answer = new _answer2.default();
   return answer.acceptAnswer(id, answerId, res, next);
 });

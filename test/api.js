@@ -243,6 +243,51 @@ describe('Test api requests', function() {
                 });
             });
         });
+        describe('Accept an answer', function() {
+            it('respond with data object', function() {
+                request(app).post('/api/v1/questions/1/answers/accept')
+                .send({
+                    answer_id: 1,
+                })
+                .end(function(err, res) {
+                    res.should.have.property('status', 200);
+                    res.body.should.be.a('object');
+                });
+            });
+            it('respond with invalid request for empty body data', function() {
+                request(app).post('/api/v1/questions/1/answers/accept')
+                .send({
+                    answer_id: ""
+                })
+                .end(function(err, res) {
+                    res.should.have.property('status', 400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.all.keys('error');
+                });
+            });
+            it('respond with invalid request for bad body data', function() {
+                request(app).post('/api/v1/questions/1/answers/accept')
+                .send({
+                    foo: "",
+                })
+                .end(function(err, res) {
+                    res.should.have.property('status', 400);
+                    res.body.should.be.a('object');
+                    res.body.should.have.all.keys('error');
+                });
+            });
+            it('respond with answer not found', function() {
+                request(app).post('/api/v1/questions/50094/answers')
+                .send({
+                    answer: 11435543,
+                })
+                .end(function(err, res) {
+                    res.should.have.property('status', 404);
+                    res.body.should.be.a('object');
+                    res.body.should.have.all.keys('error');
+                });
+            });
+        });
         after(function(done) {
             request(app).delete('/api/v1/questions/1')
             .end(done);

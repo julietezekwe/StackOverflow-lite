@@ -49,7 +49,7 @@ router.post('/:id/answers', (req, res, next) => {
 router.post('/:id/answers/accept', (req, res, next) => {
   const { id } = req.params;
   const { answer_id: answerId } = req.body;
-  if (!id) return next(new ErrorHandler('Invalid Request', 400));
+  if (!id || !answerId) return next(new ErrorHandler('Invalid Request', 400));
   const answer = new AnswerController();
   return answer.acceptAnswer(id, answerId, res, next);
 });

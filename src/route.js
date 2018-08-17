@@ -24,6 +24,20 @@ router.get('/:id', (req, res, next) => {
   res.status(200).json(question.getQuestion(id, next));
 });
 
+router.put('/:id', (req, res, next) => {
+  const { id } = req.params;
+  const { title, context } = req.body;
+  if (!title || !context) return next(new ErrorHandler('Invalid Request', 400));
+  const question = new QuestionController();
+  return question.updateQuestion(id, title, context, res, next);
+});
+
+router.delete('/:id', (req, res, next) => {
+  const { id } = req.params;
+  const question = new QuestionController();
+  return question.deleteQuestion(id, res, next);
+});
+
 router.post('/:id/answers', (req, res, next) => {
   const { id } = req.params;
   const { answer: input } = req.body;
@@ -32,12 +46,5 @@ router.post('/:id/answers', (req, res, next) => {
   return answer.addAnswer(id, input, res, next);
 });
 
-router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const { title, context } = req.body;
-  if (!title || !context) return next(new ErrorHandler('Invalid Request', 400));
-  const question = new QuestionController();
-  return question.updateQuestion(id, title, context, res, next);
-});
 
 export default router;

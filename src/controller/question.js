@@ -32,6 +32,15 @@ export default class QuestionController {
     return res.status(200).json(this.activeQuestion);
   }
 
+  deleteQuestion(id, res, next) {
+    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
+    this.activeQuestion = this.findQuestion(id);
+    if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
+    const index = this.store.indexOf(this.activeQuestion);
+    this.store.splice(index, 1);
+    return res.status(204).json({});
+  }
+
   findQuestion(id) {
     return this.store.find(item => item.id === parseInt(id, 10));
   }

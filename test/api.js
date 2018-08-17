@@ -46,6 +46,10 @@ describe('Test api requests', function() {
                     res.body.should.have.all.keys('error');
                 });
             });
+            after(function(done) {
+                request(app).delete('/api/v1/questions/1')
+                .end(done);
+            });
         });
         describe('Add a question', function() {
             it('respond with json containing question added', function() {
@@ -83,6 +87,10 @@ describe('Test api requests', function() {
                     res.body.should.be.a('object');
                     res.body.should.have.all.keys('error');
                 });
+            });
+            after(function(done) {
+                request(app).delete('/api/v1/questions/1')
+                .end(done);
             });
         });
         describe('Update a question', function() {
@@ -142,9 +150,21 @@ describe('Test api requests', function() {
                     res.body.should.have.all.keys('error');
                 });
             });
+            after(function(done) {
+                request(app).delete('/api/v1/questions/1')
+                .end(done);
+            });
         });
     })
     describe('Test answer routes', function() {
+        before(function(done) {
+            request(app).post('/api/v1/questions')
+            .send({
+                title: "Lorem Ipsum Title Gracias",
+                context: "Lorem ipsum generato cos i'll rise up and do it a thousand times again"
+            })
+            .end(done);
+        })
         describe('Add an answer', function() {
             it('respond with added answer object', function() {
                 request(app).post('/api/v1/questions/1/answers')
@@ -190,6 +210,10 @@ describe('Test api requests', function() {
                     res.body.should.have.all.keys('error');
                 });
             });
+        });
+        after(function(done) {
+            request(app).delete('/api/v1/questions/1')
+            .end(done);
         });
     })
     after(function (done) {

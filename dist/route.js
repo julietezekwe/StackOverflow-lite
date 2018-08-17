@@ -46,15 +46,6 @@ router.get('/:id', function (req, res, next) {
   res.status(200).json(question.getQuestion(id, next));
 });
 
-router.post('/:id/answers', function (req, res, next) {
-  var id = req.params.id;
-  var input = req.body.answer;
-
-  if (!input) return next(new _error2.default('Invalid Request', 400));
-  var answer = new _answer2.default();
-  return answer.addAnswer(id, input, res, next);
-});
-
 router.put('/:id', function (req, res, next) {
   var id = req.params.id;
   var _req$body2 = req.body,
@@ -64,6 +55,22 @@ router.put('/:id', function (req, res, next) {
   if (!title || !context) return next(new _error2.default('Invalid Request', 400));
   var question = new _question2.default();
   return question.updateQuestion(id, title, context, res, next);
+});
+
+router.delete('/:id', function (req, res, next) {
+  var id = req.params.id;
+
+  var question = new _question2.default();
+  return question.deleteQuestion(id, res, next);
+});
+
+router.post('/:id/answers', function (req, res, next) {
+  var id = req.params.id;
+  var input = req.body.answer;
+
+  if (!input) return next(new _error2.default('Invalid Request', 400));
+  var answer = new _answer2.default();
+  return answer.addAnswer(id, input, res, next);
 });
 
 exports.default = router;

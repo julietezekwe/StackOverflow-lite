@@ -56,6 +56,16 @@ var QuestionController = function () {
       return res.status(200).json(this.activeQuestion);
     }
   }, {
+    key: 'deleteQuestion',
+    value: function deleteQuestion(id, res, next) {
+      if (Number.isNaN(Number(id))) return next(new _error2.default('Invalid Request', 400));
+      this.activeQuestion = this.findQuestion(id);
+      if (!this.activeQuestion) return next(new _error2.default('Resource Not Found', 404));
+      var index = this.store.indexOf(this.activeQuestion);
+      this.store.splice(index, 1);
+      return res.status(204).json({});
+    }
+  }, {
     key: 'findQuestion',
     value: function findQuestion(id) {
       return this.store.find(function (item) {

@@ -5,6 +5,12 @@ const app = express();
 const baseUrl = '/api/v1/questions';
 app.use(express.json());
 
+app.use((req, res, next) => {
+  res.header('Access-Contro-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type');
+  next();
+});
+
 app.use(baseUrl, router);
 
 app.use((req, res, next) => {

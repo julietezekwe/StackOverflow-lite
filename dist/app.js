@@ -18,6 +18,12 @@ var app = (0, _express2.default)();
 var baseUrl = '/api/v1/questions';
 app.use(_express2.default.json());
 
+app.use(function (req, res, next) {
+  res.header('Access-Contro-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type');
+  next();
+});
+
 app.use(baseUrl, _route2.default);
 
 app.use(function (req, res, next) {

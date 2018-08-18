@@ -11,6 +11,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var DateTime = function () {
   function DateTime() {
     _classCallCheck(this, DateTime);
+
+    this.max = 10;
   }
 
   _createClass(DateTime, [{
@@ -29,7 +31,7 @@ var DateTime = function () {
   }, {
     key: "formatDate",
     value: function formatDate(param) {
-      return param < 10 ? "0" + param : param;
+      return param < this.max ? "0" + param : param;
     }
   }]);
 

@@ -1,4 +1,8 @@
 export default class DateTime {
+  constructor() {
+    this.max = 10;
+  }
+  
   getDate() {
     const now = new Date();
     const year = now.getFullYear();
@@ -12,7 +16,7 @@ export default class DateTime {
   }
 
   formatDate(param) {
-    return ( param < 10 ) ? `0${param}` : param;
+    return ( param < this.max ) ? `0${param}` : param;
   }
 
 }

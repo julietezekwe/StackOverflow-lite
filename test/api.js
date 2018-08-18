@@ -293,6 +293,16 @@ describe('Test api requests', function() {
             .end(done);
         });
     })
+    describe('Test invalid route', function() {
+        it('respond with route not found', function() {
+            request(app).get('/api/v987/facebook')
+            .end(function(err, res) {
+                res.should.have.property('status', 404);
+                res.body.should.be.a('object');
+                res.body.should.have.all.keys('error');
+            });
+        });
+    });
     after(function (done) {
         app.close();
         done();

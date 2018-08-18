@@ -14,6 +14,10 @@ var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _date = require('./date');
+
+var _date2 = _interopRequireDefault(_date);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -53,6 +57,8 @@ var QuestionController = function () {
       if (!this.activeQuestion) return next(new _error2.default('Resource Not Found', 404));
       this.activeQuestion.title = title;
       this.activeQuestion.context = context;
+      var date = new _date2.default();
+      this.activeQuestion.updatedAt = date.getDate();
       return res.status(200).json(this.activeQuestion);
     }
   }, {
@@ -81,12 +87,16 @@ var QuestionController = function () {
     key: 'createQuestionObject',
     value: function createQuestionObject(title, context) {
       var id = this.getId();
+      var date = new _date2.default();
+      var createdAt = date.getDate();
       return {
         id: id,
         title: title,
         context: context,
         answers: [],
-        selected: null
+        selected: null,
+        createdAt: createdAt,
+        updatedAt: null
       };
     }
   }]);

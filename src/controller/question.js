@@ -1,5 +1,6 @@
 import store from '../model/store';
 import ErrorHandler from './error';
+import DateTime from './date';
 
 export default class QuestionController {
   constructor() {
@@ -29,6 +30,8 @@ export default class QuestionController {
     if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
     this.activeQuestion.title = title;
     this.activeQuestion.context = context;
+    const date = new DateTime();
+    this.activeQuestion.updatedAt = date.getDate();
     return res.status(200).json(this.activeQuestion);
   }
 
@@ -51,12 +54,16 @@ export default class QuestionController {
 
   createQuestionObject(title, context) {
     const id = this.getId();
+    const date = new DateTime();
+    const createdAt = date.getDate();
     return {
       id,
       title,
       context,
       answers: [],
       selected: null,
+      createdAt,
+      updatedAt: null,
     };
   }
 }

@@ -14,6 +14,10 @@ var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _date = require('./date');
+
+var _date2 = _interopRequireDefault(_date);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49,9 +53,12 @@ var AnswerController = function () {
     key: 'createAnswerObject',
     value: function createAnswerObject(answer) {
       var id = this.getId();
+      var date = new _date2.default();
+      var createdAt = date.getDate();
       return {
         id: id,
-        answer: answer
+        answer: answer,
+        createdAt: createdAt
       };
     }
   }, {

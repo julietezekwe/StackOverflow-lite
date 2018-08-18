@@ -1,5 +1,6 @@
 import store from '../model/store';
 import ErrorHandler from './error';
+import DateTime from './date';
 
 export default class AnswerController {
   constructor() {
@@ -26,9 +27,12 @@ export default class AnswerController {
 
   createAnswerObject(answer) {
     const id = this.getId();
+    const date = new DateTime();
+    const createdAt = date.getDate();
     return {
       id,
       answer,
+      createdAt,
     };
   }
 

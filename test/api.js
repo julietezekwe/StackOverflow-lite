@@ -19,7 +19,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 200);
                     res.body.should.be.a('array');
-                    res.body[0].should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
+                    res.body[0].should.have.any.keys('id', 'title', 'context', 'answers', 'selected', 'createdAt', 'updatedAt');
                 });
             });
             it('respond with selected question', function() {
@@ -27,7 +27,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 200);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
+                    res.body.should.have.any.keys('id', 'title', 'context', 'answers', 'selected', 'createdAt', 'updatedAt');
                 });
             });
             it('respond with question not found', function() {
@@ -61,7 +61,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 201);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
+                    res.body.should.have.any.keys('id', 'title', 'context', 'answers', 'selected', 'createdAt', 'updatedAt');
                 });
             });
             it('respond with invalid request for empty body data', function() {
@@ -111,7 +111,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 200);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id', 'title', 'context', 'answers', 'selected');
+                    res.body.should.have.any.keys('id', 'title', 'context', 'answers', 'selected', 'createdAt', 'updatedAt');
                 });
             });
             it('respond with invalid request for empty body data', function() {
@@ -206,7 +206,7 @@ describe('Test api requests', function() {
                 .end(function(err, res) {
                     res.should.have.property('status', 201);
                     res.body.should.be.a('object');
-                    res.body.should.have.all.keys('id','answer');
+                    res.body.should.have.all.keys('id','answer','createdAt');
                 });
             });
             it('respond with invalid request for empty body data', function() {

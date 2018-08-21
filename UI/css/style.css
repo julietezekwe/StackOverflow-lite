@@ -1,20 +1,21 @@
 *{
-	font-family: Trebuchet MS;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: 1.4;
 }
-html{
+html, body{
 	height: 100%;
 }
 body{
-	position: relative;
+	background: #f1f1f1;
 	margin: 0;
-  	padding-bottom: 6rem;
-  	min-height: 100%;
-}
+	display: flex;
+	flex-direction: column;
+  }
 ul, li, h3{
 	margin: 0;
 	padding: 0;
 }
-p, li, h1{
+p, li, h1, h2{
 	color: #4e4e4e;
 }
 a{
@@ -54,34 +55,55 @@ header{
 }
 
 .nav li:not(:last-child):not(.brand-logo) {
-  margin-right: 30px;
+  /*margin-right: 30px;*/
 }
 
 .nav li:not(.brand-logo) {
   padding-top: 10px;
 }
 
+.nav li:not(.brand-logo) a {
+  	border-radius: .25rem;
+    background: transparent;
+    padding: 10px;
+}
+
+.nav li:not(.brand-logo) a:hover{
+  	background: #ecf4fc;
+  	color: #0192ca;
+}
+
 .nav li a{
 	color: #fff;
 }
-
-.nav li a:hover{
-	color: #eee;
+.wrapper{
+	flex: 1 0 auto;
 }
-
 .top-questions{
     border-bottom: 1px solid #eee;
+    background: #fff;
 }
 .top-questions .question a{
-	color: #174c61;
+	color: #0e7096;
+	font-size: 17px;
+}
+
+.top-questions .answer{
+	font-weight: bold; 
+	color: #6a737c;
+}
+
+.top-questions .question a:hover{
+	text-decoration: underline;
+}
+
+.top-questions .user{
+	color: #6a737c; 
 	font-size: 17px;
 }
 footer {
-  position: absolute;
+	flex-shrink: 0;
   padding: 1rem;
-  right: 0;
-  bottom: 0;
-  left: 0;
   text-align: center;
 }
 footer p{
@@ -96,7 +118,72 @@ footer p{
 	text-decoration: underline;
 }
 
-/* CUSTOM CLASSES */
+.clear-both{
+	clear: both;
+}
+
+.feeds{
+	color: #333;
+    font-weight: 500;
+    position: relative;
+    border-bottom: 1px solid #b1a9a9;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+}
+
+.feed-item{
+	color: #666;
+	font-weight: 400;
+	cursor: default;
+	border-radius: .25rem;
+	padding: 7px;  
+	float: right; 
+	width: 75%; 
+	margin-bottom: 0px;
+	cursor: pointer;
+}
+
+.feed-item:hover{
+	background: #c1bcbc;
+}
+
+.feed-item.active{
+	background: #d6d0d0;
+}
+
+#how-to{
+	border-radius: 4px;
+    border: 1px solid #e2e2e2;
+    padding: 8px;
+    margin-bottom: 16px;
+    background: #f9f9f9;
+}
+
+.tip-list{
+	list-style-type: disc;
+    list-style-position: initial;
+    list-style-image: initial;
+    margin-left: 16px;
+}
+
+#page-bg{
+	background: url(../images/background.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.float-left{
+	float: left
+}
+
+.float-right{
+	float: right
+}
+
 .flex {
 	display: flex;
 	flex-wrap: wrap;
@@ -105,8 +192,17 @@ footer p{
 .mr-auto{
 	margin-right: auto;
 }
+.m-0{
+	margin: 0;
+}
+.bg-white{
+	background: #fff;
+}
 .mr-20{
 	margin-right: 20px;
+}
+.p-7{
+	padding: 7px;
 }
 .flex-30{
 	flex-basis: 30px;
@@ -118,6 +214,9 @@ footer p{
 	color: white;
 	border-radius: 5px;
 	cursor: pointer;
+}
+.color-blued{
+	color: #0192ca;
 }
 .btn-lg{
 	height: 50px;
@@ -177,7 +276,10 @@ footer p{
 	margin-top: 20px;
 }
 .form-center{
-	margin: 3% auto;
+	margin: 20px auto 0 auto;
+}
+.form-register{
+	margin: 20px auto;
 }
 .form-50{
 	width: 50%;
@@ -192,14 +294,24 @@ footer p{
 	font-weight: bold;
 }
 .form{
-    border: 1px solid #eae5e5;
     padding: 20px;
+    background: #fff;
+    border: 1px solid #e2e2e2;
+    border-radius: 4px;
+    width: 650px;
+    bottom: initial;
+    left: 0;
+    right: 0;
+}
+.form-ask{
+	width: 90%;
 }
 .mb-0{
 	margin-bottom: 0;
 }
 .background{
-	background: #3bbced;
+	/*background: #3bbced;*/
+	background: #0192ca;
 }
 .asked{
 	color: #4e5152;
@@ -218,7 +330,7 @@ footer p{
 }
 .box-shadow{
 	padding: 20px;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 	box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
 	transition: all 0.3s ease;
 }
@@ -235,6 +347,12 @@ footer p{
     background: green;
     text-align: center;
 }
+.fixed{
+	/*position: fixed;*/
+}
+.ask-button{
+	margin: 15px 0;
+}
 .form-control{
     width: 96%;
     padding: 15px 2%;
@@ -247,6 +365,26 @@ footer p{
 .form-control:focus {
     background-color: #ddd;
     outline-color: #3bbced;
+}
+
+.faint-black{
+	color: #0fb4f3bd;
+}
+
+.f-13{
+	font-size: 13px;
+}
+
+.f-15{
+	font-size: 15px;
+}
+
+.color-999{
+	color: #999;
+}
+
+.grid-md-2{
+    grid-column: span 2;
 }
 
 .grid-md-3{
@@ -308,7 +446,10 @@ footer p{
 		grid-column: span 4;
 	}
 	.form-center {
-		margin: 18% auto;
+		margin: 10% auto;
+	}
+	.form-center-ask{
+		margin: 1% auto;
 	}
 	.form-sm-width{
 		width: 50%;

@@ -32,22 +32,30 @@ var AnswerController = function () {
 
   _createClass(AnswerController, [{
     key: 'addAnswer',
-    value: function addAnswer(id, answer, res, next) {
-      if (Number.isNaN(Number(id))) return next(new _error2.default('Invalid Request', 400));
+    value: function addAnswer(id, answer, response, next) {
+      if (Number.isNaN(Number(id))) {
+        return next(new _error2.default('Invalid Request', 400));
+      }
       this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion) return next(new _error2.default('Resource Not Found', 404));
+      if (!this.activeQuestion) {
+        return next(new _error2.default('Resource Not Found', 404));
+      }
       var data = this.createAnswerObject(answer);
       this.activeQuestion.answers.push(data);
-      return res.status(201).json(data);
+      return response.status(201).json(data);
     }
   }, {
     key: 'acceptAnswer',
-    value: function acceptAnswer(id, answerId, res, next) {
-      if (Number.isNaN(Number(id)) || Number.isNaN(Number(answerId))) return next(new _error2.default('Invalid Request', 400));
+    value: function acceptAnswer(id, answerId, response, next) {
+      if (Number.isNaN(Number(id)) || Number.isNaN(Number(answerId))) {
+        return next(new _error2.default('Invalid Request', 400));
+      }
       this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion || !this.checkAnswerId(answerId)) return next(new _error2.default('Resource Not Found', 404));
+      if (!this.activeQuestion || !this.checkAnswerId(answerId)) {
+        return next(new _error2.default('Resource Not Found', 404));
+      }
       this.activeQuestion.selected = answerId;
-      return res.status(200).json(this.activeQuestion);
+      return response.status(200).json(this.activeQuestion);
     }
   }, {
     key: 'createAnswerObject',

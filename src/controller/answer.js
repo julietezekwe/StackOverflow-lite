@@ -8,21 +8,29 @@ export default class AnswerController {
     this.activeQuestion = null;
   }
 
-  addAnswer(id, answer, res, next) {    
-    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
+  addAnswer(id, answer, response, next) {
+    if (Number.isNaN(Number(id))) {
+      return next(new ErrorHandler('Invalid Request', 400));
+    }
     this.activeQuestion = this.findQuestion(id);
-    if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
+    if (!this.activeQuestion) {
+      return next(new ErrorHandler('Resource Not Found', 404));
+    }
     const data = this.createAnswerObject(answer);
     this.activeQuestion.answers.push(data);
-    return res.status(201).json(data);
+    return response.status(201).json(data);
   }
 
-  acceptAnswer(id, answerId, res, next) {    
-    if (Number.isNaN(Number(id)) || Number.isNaN(Number(answerId))) return next(new ErrorHandler('Invalid Request', 400));
+  acceptAnswer(id, answerId, response, next) {
+    if (Number.isNaN(Number(id)) || Number.isNaN(Number(answerId))) {
+      return next(new ErrorHandler('Invalid Request', 400));
+    }
     this.activeQuestion = this.findQuestion(id);
-    if (!this.activeQuestion || (!this.checkAnswerId(answerId))) return next(new ErrorHandler('Resource Not Found', 404));
+    if (!this.activeQuestion || (!this.checkAnswerId(answerId))) {
+      return next(new ErrorHandler('Resource Not Found', 404));
+    }
     this.activeQuestion.selected = answerId;
-    return res.status(200).json(this.activeQuestion);
+    return response.status(200).json(this.activeQuestion);
   }
 
   createAnswerObject(answer) {

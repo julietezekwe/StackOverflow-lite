@@ -2,6 +2,7 @@ import express from 'express';
 import QuestionController from './controller/question';
 import AnswerController from './controller/answer';
 import ErrorHandler from './controller/error';
+import pool from './dbconnect';
 
 const router = express.Router();
 
@@ -62,4 +63,17 @@ router.post('/:id/answers/accept', (request, response, next) => {
   return answer.acceptAnswer(id, answerId, response, next);
 });
 
+router.post('/test', (request, response, next) => {
+  pool.connect((err, client, done) => {
+    if (err) throw err;
+    client.query('INSERT INTO questions(title, context) VALUES($1, $2) RETURNING *', [request.body.title, request.body.context], (error, res) => {
+      done()
+      if (error) {
+        console.log(error.stack)
+      } else {
+        response.send(res.rows);
+      }
+    });
+  });
+});
 export default router;

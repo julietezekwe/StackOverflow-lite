@@ -10,6 +10,10 @@ var _store = require('../model/store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _dbconnect = require('../dbconnect');
+
+var _dbconnect2 = _interopRequireDefault(_dbconnect);
+
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -46,10 +50,12 @@ var QuestionController = function () {
     }
   }, {
     key: 'addQuestion',
-    value: function addQuestion(title, context) {
-      var data = this.createQuestionObject(title, context);
-      _store2.default.push(data);
-      return data;
+    value: function addQuestion(title, context, response) {
+      var query = {
+        text: 'INSERT INTO questions(title, context, user_id) VALUES($1, $2, $3) RETURNING *',
+        values: [title, context, 1]
+      };
+      return this.runQuery(query, response);
     }
   }, {
     key: 'updateQuestion',
@@ -94,20 +100,19 @@ var QuestionController = function () {
       return this.store.length + 1;
     }
   }, {
-    key: 'createQuestionObject',
-    value: function createQuestionObject(title, context) {
-      var id = this.getId();
+    key: 'runQuery',
+    value: function runQuery(query, response) {
       var date = new _date2.default();
-      var createdAt = date.getDate();
-      return {
-        id: id,
-        title: title,
-        context: context,
-        answers: [],
-        selected: null,
-        createdAt: createdAt,
-        updatedAt: null
-      };
+      _dbconnect2.default.connect(function (err, client, done) {
+        if (err) throw err;
+        client.query(query, function (error, res) {
+          done();
+          if (error) {
+            console.log(error.stack);
+          }
+          return response.status(201).json(res.rows[0]);
+        });
+      });
     }
   }]);
 

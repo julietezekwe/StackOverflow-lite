@@ -6,52 +6,60 @@ import ErrorHandler from './controller/error';
 const router = express.Router();
 
 
-router.get('/', (req, res) => {
+router.get('/', (request, response) => {
   const question = new QuestionController();
-  res.status(200).json(question.getAllQuestions());
+  response.status(200).json(question.getAllQuestions());
 });
 
-router.post('/', (req, res, next) => {
-  const { title, context } = req.body;
-  if (!title || !context) return next(new ErrorHandler('Invalid Request', 400));
+router.post('/', (request, response, next) => {
+  const { title, context } = request.body;
+  if (!title || !context) {
+    return next(new ErrorHandler('Invalid Request', 400));
+  }
   const question = new QuestionController();
-  res.status(201).json(question.addQuestion(title, context));
+  return response.status(201).json(question.addQuestion(title, context));
 });
 
-router.get('/:id', (req, res, next) => {
-  const { id } = req.params;
+router.get('/:id', (request, response, next) => {
+  const { id } = request.params;
   const question = new QuestionController();
-  res.status(200).json(question.getQuestion(id, next));
+  return response.status(200).json(question.getQuestion(id, next));
 });
 
-router.put('/:id', (req, res, next) => {
-  const { id } = req.params;
-  const { title, context } = req.body;
-  if (!title || !context) return next(new ErrorHandler('Invalid Request', 400));
+router.put('/:id', (request, response, next) => {
+  const { id } = request.params;
+  const { title, context } = request.body;
+  if (!title || !context) {
+    return next(new ErrorHandler('Invalid Request', 400));
+  }
   const question = new QuestionController();
-  return question.updateQuestion(id, title, context, res, next);
+  return question.updateQuestion(id, title, context, response, next);
 });
 
-router.delete('/:id', (req, res, next) => {
-  const { id } = req.params;
+router.delete('/:id', (request, response, next) => {
+  const { id } = request.params;
   const question = new QuestionController();
-  return question.deleteQuestion(id, res, next);
+  return question.deleteQuestion(id, response, next);
 });
 
-router.post('/:id/answers', (req, res, next) => {
-  const { id } = req.params;
-  const { answer: input } = req.body;
-  if (!input) return next(new ErrorHandler('Invalid Request', 400));
+router.post('/:id/answers', (request, response, next) => {
+  const { id } = request.params;
+  const { answer: input } = request.body;
+  if (!input) {
+    return next(new ErrorHandler('Invalid Request', 400));
+  }
   const answer = new AnswerController();
-  return answer.addAnswer(id, input, res, next);
+  return answer.addAnswer(id, input, response, next);
 });
 
-router.post('/:id/answers/accept', (req, res, next) => {
-  const { id } = req.params;
-  const { answer_id: answerId } = req.body;
-  if (!id || !answerId) return next(new ErrorHandler('Invalid Request', 400));
+router.post('/:id/answers/accept', (request, response, next) => {
+  const { id } = request.params;
+  const { answer_id: answerId } = request.body;
+  if (!id || !answerId) {
+    return next(new ErrorHandler('Invalid Request', 400));
+  }
   const answer = new AnswerController();
-  return answer.acceptAnswer(id, answerId, res, next);
+  return answer.acceptAnswer(id, answerId, response, next);
 });
 
 export default router;

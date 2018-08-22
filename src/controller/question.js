@@ -13,7 +13,9 @@ export default class QuestionController {
   }
 
   getQuestion(id, next) {
-    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
+    if (Number.isNaN(Number(id))) {
+      return next(new ErrorHandler('Invalid Request', 400));
+    }
     const data = this.findQuestion(id);
     return (data) || next(new ErrorHandler('Resource Not Found', 404));
   }
@@ -24,24 +26,32 @@ export default class QuestionController {
     return data;
   }
 
-  updateQuestion(id, title, context, res, next) {
-    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
+  updateQuestion(id, title, context, response, next) {
+    if (Number.isNaN(Number(id))) {
+      return next(new ErrorHandler('Invalid Request', 400));
+    }
     this.activeQuestion = this.findQuestion(id);
-    if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
+    if (!this.activeQuestion) {
+      return next(new ErrorHandler('Resource Not Found', 404));
+    }
     this.activeQuestion.title = title;
     this.activeQuestion.context = context;
     const date = new DateTime();
     this.activeQuestion.updatedAt = date.getDate();
-    return res.status(200).json(this.activeQuestion);
+    return response.status(200).json(this.activeQuestion);
   }
 
-  deleteQuestion(id, res, next) {
-    if (Number.isNaN(Number(id))) return next(new ErrorHandler('Invalid Request', 400));
+  deleteQuestion(id, response, next) {
+    if (Number.isNaN(Number(id))) {
+      return next(new ErrorHandler('Invalid Request', 400));
+    }
     this.activeQuestion = this.findQuestion(id);
-    if (!this.activeQuestion) return next(new ErrorHandler('Resource Not Found', 404));
+    if (!this.activeQuestion) {
+      return next(new ErrorHandler('Resource Not Found', 404));
+    }
     const index = this.store.indexOf(this.activeQuestion);
     this.store.splice(index, 1);
-    return res.status(204).json({});
+    return response.status(204).json({});
   }
 
   findQuestion(id) {

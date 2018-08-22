@@ -38,7 +38,9 @@ var QuestionController = function () {
   }, {
     key: 'getQuestion',
     value: function getQuestion(id, next) {
-      if (Number.isNaN(Number(id))) return next(new _error2.default('Invalid Request', 400));
+      if (Number.isNaN(Number(id))) {
+        return next(new _error2.default('Invalid Request', 400));
+      }
       var data = this.findQuestion(id);
       return data || next(new _error2.default('Resource Not Found', 404));
     }
@@ -51,25 +53,33 @@ var QuestionController = function () {
     }
   }, {
     key: 'updateQuestion',
-    value: function updateQuestion(id, title, context, res, next) {
-      if (Number.isNaN(Number(id))) return next(new _error2.default('Invalid Request', 400));
+    value: function updateQuestion(id, title, context, response, next) {
+      if (Number.isNaN(Number(id))) {
+        return next(new _error2.default('Invalid Request', 400));
+      }
       this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion) return next(new _error2.default('Resource Not Found', 404));
+      if (!this.activeQuestion) {
+        return next(new _error2.default('Resource Not Found', 404));
+      }
       this.activeQuestion.title = title;
       this.activeQuestion.context = context;
       var date = new _date2.default();
       this.activeQuestion.updatedAt = date.getDate();
-      return res.status(200).json(this.activeQuestion);
+      return response.status(200).json(this.activeQuestion);
     }
   }, {
     key: 'deleteQuestion',
-    value: function deleteQuestion(id, res, next) {
-      if (Number.isNaN(Number(id))) return next(new _error2.default('Invalid Request', 400));
+    value: function deleteQuestion(id, response, next) {
+      if (Number.isNaN(Number(id))) {
+        return next(new _error2.default('Invalid Request', 400));
+      }
       this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion) return next(new _error2.default('Resource Not Found', 404));
+      if (!this.activeQuestion) {
+        return next(new _error2.default('Resource Not Found', 404));
+      }
       var index = this.store.indexOf(this.activeQuestion);
       this.store.splice(index, 1);
-      return res.status(204).json({});
+      return response.status(204).json({});
     }
   }, {
     key: 'findQuestion',

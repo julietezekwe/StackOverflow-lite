@@ -26,7 +26,7 @@ export default class QuestionController {
       text: 'INSERT INTO questions(title, context, user_id) VALUES($1, $2, $3) RETURNING *',
       values: [title, context, 1],
     };
-    response.status(201).json(this.runQuery(query));
+    return this.runQuery(query, response);
   }
 
   updateQuestion(id, title, context, response, next) {
@@ -65,8 +65,8 @@ export default class QuestionController {
     return (this.store.length + 1);
   }
 
-  runQuery(query) {
-    const date = new DateTime();
+  runQuery(query, response) {
+    // const date = new DateTime();
     pool.connect((err, client, done) => {
       if (err) throw err;
       client.query(query, (error, res) => {
@@ -74,8 +74,7 @@ export default class QuestionController {
         if (error) {
           console.log(error.stack);
         }
-        const [data] = res.rows[0];
-        return data;
+        return response.status(201).json(res.rows[0]);
       });
     });
   }

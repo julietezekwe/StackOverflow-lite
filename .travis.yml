@@ -8,7 +8,8 @@ services:
   - postgresql
 before_script:
   - psql -c "create user edu1 with password 'admin@123';" -U postgres
-  - psql -c 'create database stackoverflow;' -U postgres
+  - psql -c "create database stackoverflow;" -U postgres
+  - psql -c "insert into users(name, email, password) values('Jeffery','admin@blog.com',secret);" -U postgres
   - npm run build
   - npm run migration
 after_success:

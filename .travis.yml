@@ -4,7 +4,12 @@ node_js:
 cache:
   directories:
     - "node_modules"
+services:
+  - postgresql
 before_script:
+  - psql -c 'create database stalker_test;' -U postgres
+  - psql -c "create user edu1 with password 'admin@123';" -U postgres
   - npm run build
+  - npm run migration
 after_success:
   - npm run coveralls

@@ -4,11 +4,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _store = require('../model/store');
 
 var _store2 = _interopRequireDefault(_store);
+
+var _dbconnect = require('../dbconnect');
+
+var _dbconnect2 = _interopRequireDefault(_dbconnect);
 
 var _error = require('./error');
 
@@ -46,10 +52,12 @@ var QuestionController = function () {
     }
   }, {
     key: 'addQuestion',
-    value: function addQuestion(title, context) {
-      var data = this.createQuestionObject(title, context);
-      _store2.default.push(data);
-      return data;
+    value: function addQuestion(title, context, response) {
+      var query = {
+        text: 'INSERT INTO questions(title, context, user_id) VALUES($1, $2, $3) RETURNING *',
+        values: [title, context, 1]
+      };
+      response.status(201).json(this.runQuery(query));
     }
   }, {
     key: 'updateQuestion',
@@ -94,20 +102,23 @@ var QuestionController = function () {
       return this.store.length + 1;
     }
   }, {
-    key: 'createQuestionObject',
-    value: function createQuestionObject(title, context) {
-      var id = this.getId();
+    key: 'runQuery',
+    value: function runQuery(query) {
       var date = new _date2.default();
-      var createdAt = date.getDate();
-      return {
-        id: id,
-        title: title,
-        context: context,
-        answers: [],
-        selected: null,
-        createdAt: createdAt,
-        updatedAt: null
-      };
+      _dbconnect2.default.connect(function (err, client, done) {
+        if (err) throw err;
+        client.query(query, function (error, res) {
+          done();
+          if (error) {
+            console.log(error.stack);
+          }
+
+          var _res$rows$ = _slicedToArray(res.rows[0], 1),
+              data = _res$rows$[0];
+
+          return data;
+        });
+      });
     }
   }]);
 

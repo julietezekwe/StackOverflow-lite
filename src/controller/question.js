@@ -1,4 +1,5 @@
 import store from '../model/store';
+import pool from '../dbconnect';
 import ErrorHandler from './error';
 import DateTime from './date';
 
@@ -20,10 +21,12 @@ export default class QuestionController {
     return (data) || next(new ErrorHandler('Resource Not Found', 404));
   }
 
-  addQuestion(title, context) {
-    const data = this.createQuestionObject(title, context);
-    store.push(data);
-    return data;
+  addQuestion(title, context, response) {
+    const query = {
+      text: 'INSERT INTO questions(title, context, user_id) VALUES($1, $2, $3) RETURNING *',
+      values: [title, context, 1],
+    };
+    response.status(201).json(this.runQuery(query));
   }
 
   updateQuestion(id, title, context, response, next) {
@@ -62,18 +65,18 @@ export default class QuestionController {
     return (this.store.length + 1);
   }
 
-  createQuestionObject(title, context) {
-    const id = this.getId();
+  runQuery(query) {
     const date = new DateTime();
-    const createdAt = date.getDate();
-    return {
-      id,
-      title,
-      context,
-      answers: [],
-      selected: null,
-      createdAt,
-      updatedAt: null,
-    };
+    pool.connect((err, client, done) => {
+      if (err) throw err;
+      client.query(query, (error, res) => {
+        done();
+        if (error) {
+          console.log(error.stack);
+        }
+        const [data] = res.rows[0];
+        return data;
+      });
+    });
   }
 }

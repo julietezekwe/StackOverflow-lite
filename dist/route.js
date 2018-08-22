@@ -20,10 +20,6 @@ var _error = require('./controller/error');
 
 var _error2 = _interopRequireDefault(_error);
 
-var _dbconnect = require('./dbconnect');
-
-var _dbconnect2 = _interopRequireDefault(_dbconnect);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
@@ -42,7 +38,7 @@ router.post('/', function (request, response, next) {
     return next(new _error2.default('Invalid Request', 400));
   }
   var question = new _question2.default();
-  return response.status(201).json(question.addQuestion(title, context));
+  return question.addQuestion(title, context, response);
 });
 
 router.get('/:id', function (request, response, next) {
@@ -94,17 +90,4 @@ router.post('/:id/answers/accept', function (request, response, next) {
   return answer.acceptAnswer(id, answerId, response, next);
 });
 
-router.post('/test', function (request, response, next) {
-  _dbconnect2.default.connect(function (err, client, done) {
-    if (err) throw err;
-    client.query('INSERT INTO questions(title, context) VALUES($1, $2) RETURNING *', [request.body.title, request.body.context], function (error, res) {
-      done();
-      if (error) {
-        console.log(error.stack);
-      } else {
-        response.send(res.rows);
-      }
-    });
-  });
-});
 exports.default = router;

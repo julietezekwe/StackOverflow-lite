@@ -9,7 +9,7 @@ services:
 before_script:
   - psql -c "create extension if not exists uuid-ossp;" -U postgres
   - psql -c "create user edu1 with password 'admin@123';" -U postgres
-  - psql -c "create database stackoverflow;" -U postgres
+  - node dist/seed
   - npm run build
   - npm run migration
   - psql -c "insert into Users(name, email, password) values('Jeffery','admin@blog.com',secret);" -U postgres

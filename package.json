@@ -9,7 +9,7 @@
     "start": "node dist/app",
     "migration": "node dist/migration",
     "test": "mocha --require babel-core/register --recursive",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha",
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha --recursive",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {

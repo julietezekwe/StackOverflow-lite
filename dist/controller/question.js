@@ -29,9 +29,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var QuestionController = function () {
   function QuestionController() {
     _classCallCheck(this, QuestionController);
-
-    this.store = _store2.default;
-    this.activeQuestion = null;
   }
 
   _createClass(QuestionController, [{
@@ -56,11 +53,11 @@ var QuestionController = function () {
       }
       _dbconnect2.default.connect(function (err, client, done) {
         client.query('SELECT * FROM questions WHERE id = $1', [id], function (error, res) {
-          done();
           if (res.rowCount < 1) {
             return next(new _error2.default('Resource Not Found', 404));
           }
           client.query('SELECT * FROM answers WHERE question_id = $1', [res.rows[0].id], function (error, reso) {
+            done();
             res.rows[0].answers = reso.rows;
             return response.status(200).json(res.rows[0]);
           });
@@ -77,22 +74,6 @@ var QuestionController = function () {
       return this.runQuery(query, response);
     }
   }, {
-    key: 'updateQuestion',
-    value: function updateQuestion(id, title, context, response, next) {
-      if (Number.isNaN(Number(id))) {
-        return next(new _error2.default('Invalid Request', 400));
-      }
-      this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion) {
-        return next(new _error2.default('Resource Not Found', 404));
-      }
-      this.activeQuestion.title = title;
-      this.activeQuestion.context = context;
-      var date = new _date2.default();
-      this.activeQuestion.updatedAt = date.getDate();
-      return response.status(200).json(this.activeQuestion);
-    }
-  }, {
     key: 'deleteQuestion',
     value: function deleteQuestion(id, response, next) {
       if (Number.isNaN(Number(id))) {
@@ -107,30 +88,10 @@ var QuestionController = function () {
       return response.status(204).json({});
     }
   }, {
-    key: 'findQuestion',
-    value: function findQuestion(id) {
-      return this.store.find(function (item) {
-        return item.id === parseInt(id, 10);
-      });
-    }
-  }, {
-    key: 'getId',
-    value: function getId() {
-      return this.store.length + 1;
-    }
-  }, {
     key: 'runQuery',
     value: function runQuery(query, response) {
-      // const date = new DateTime();
-      _dbconnect2.default.connect(function (err, client, done) {
-        if (err) throw err;
-        client.query(query, function (error, res) {
-          done();
-          if (error) {
-            console.log(error.stack);
-          }
-          return response.status(201).json(res.rows[0]);
-        });
+      _dbconnect2.default.query(query, function (error, data) {
+        return response.status(201).json(data.rows[0]);
       });
     }
   }]);

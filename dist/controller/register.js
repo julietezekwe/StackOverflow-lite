@@ -10,13 +10,13 @@ var _bcrypt = require('bcrypt');
 
 var _bcrypt2 = _interopRequireDefault(_bcrypt);
 
+var _dbconnect = require('../db/dbconnect');
+
+var _dbconnect2 = _interopRequireDefault(_dbconnect);
+
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
-
-var _dbconnect = require('../dbconnect');
-
-var _dbconnect2 = _interopRequireDefault(_dbconnect);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34,22 +34,34 @@ var RegisterController = function () {
     value: function register(name, email, password, response, next) {
       var _this = this;
 
-      _dbconnect2.default.connect(function (err, client, done) {
-        if (err) throw err;
-        client.query('SELECT * FROM users WHERE email = $1', [email], function (error, object) {
-          if (object.rowCount < 1) {
-            _bcrypt2.default.hash(password, _this.saltRounds).then(function (hash) {
-              client.query('INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING name, email', [name, email, hash], function (error, data) {
-                done();
-                return response.status(201).json({ status: 'success', data: data.rows[0] });
-              });
+      var query = {
+        text: 'SELECT * FROM users WHERE email = $1',
+        values: [email]
+      };
+      return this.runQuery(query).then(function (data) {
+        if (data.rowCount < 1) {
+          return _bcrypt2.default.hash(password, _this.saltRounds).then(function (hash) {
+            query = {
+              text: 'INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING name, email',
+              values: [name, email, hash]
+            };
+            return _this.runQuery(query).then(function (object) {
+              return object.rows[0];
             });
-          } else {
-            done();
-            return next(new _error2.default('Email already in use', 404));
-          }
-        });
+          }).then(function (obj) {
+            return response.status(201).json({ status: 'success', data: obj });
+          });
+        }
+        return next(new _error2.default('Email already in use', 404));
       });
+    }
+  }, {
+    key: 'runQuery',
+    value: function runQuery(query) {
+      this.result = _dbconnect2.default.query(query).then(function (response) {
+        return response;
+      });
+      return this.result;
     }
   }]);
 

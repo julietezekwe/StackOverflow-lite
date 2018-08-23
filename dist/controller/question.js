@@ -6,21 +6,13 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _store = require('../model/store');
-
-var _store2 = _interopRequireDefault(_store);
-
-var _dbconnect = require('../dbconnect');
+var _dbconnect = require('../db/dbconnect');
 
 var _dbconnect2 = _interopRequireDefault(_dbconnect);
 
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
-
-var _date = require('./date');
-
-var _date2 = _interopRequireDefault(_date);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -34,34 +26,42 @@ var QuestionController = function () {
   _createClass(QuestionController, [{
     key: 'getAllQuestions',
     value: function getAllQuestions(response) {
-      _dbconnect2.default.connect(function (err, client, done) {
-        if (err) throw err;
-        client.query('SELECT * FROM questions', function (error, res) {
-          done();
-          if (error) {
-            console.log(error.stack);
-          }
-          return response.status(200).json(res.rows);
-        });
+      var query = {
+        text: 'SELECT * FROM questions'
+      };
+      this.runQuery(query).then(function (data) {
+        return response.status(200).json(data.rows);
       });
     }
   }, {
     key: 'getQuestion',
     value: function getQuestion(id, response, next) {
+      var _this = this;
+
+      this.activeQuestion = null;
       if (Number.isNaN(Number(id))) {
         return next(new _error2.default('Invalid Request', 400));
       }
-      _dbconnect2.default.connect(function (err, client, done) {
-        client.query('SELECT * FROM questions WHERE id = $1', [id], function (error, res) {
-          if (res.rowCount < 1) {
-            return next(new _error2.default('Resource Not Found', 404));
-          }
-          client.query('SELECT * FROM answers WHERE question_id = $1', [res.rows[0].id], function (error, reso) {
-            done();
-            res.rows[0].answers = reso.rows;
-            return response.status(200).json(res.rows[0]);
-          });
+      var query = {
+        text: 'SELECT * FROM questions WHERE id = $1',
+        values: [id]
+      };
+      this.result = this.runQuery(query).then(function (data) {
+        if (data.rowCount < 1) {
+          return next(new _error2.default('Resource Not Found', 404));
+        }
+        _this.activeQuestion = data.rows[0];
+        query = {
+          text: 'SELECT * FROM answers WHERE question_id = $1',
+          values: [_this.activeQuestion.id]
+        };
+        return _this.runQuery(query).then(function (object) {
+          _this.activeQuestion.answers = object.rows;
+          return _this.activeQuestion;
         });
+      });
+      return this.result.then(function (data) {
+        return response.status(200).json(data);
       });
     }
   }, {
@@ -71,28 +71,17 @@ var QuestionController = function () {
         text: 'INSERT INTO questions(title, context, user_id) VALUES($1, $2, $3) RETURNING *',
         values: [title, context, 1]
       };
-      return this.runQuery(query, response);
-    }
-  }, {
-    key: 'deleteQuestion',
-    value: function deleteQuestion(id, response, next) {
-      if (Number.isNaN(Number(id))) {
-        return next(new _error2.default('Invalid Request', 400));
-      }
-      this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion) {
-        return next(new _error2.default('Resource Not Found', 404));
-      }
-      var index = this.store.indexOf(this.activeQuestion);
-      this.store.splice(index, 1);
-      return response.status(204).json({});
+      this.runQuery(query).then(function (data) {
+        return response.status(201).json(data.rows[0]);
+      });
     }
   }, {
     key: 'runQuery',
-    value: function runQuery(query, response) {
-      _dbconnect2.default.query(query, function (error, data) {
-        return response.status(201).json(data.rows[0]);
+    value: function runQuery(query) {
+      this.result = _dbconnect2.default.query(query).then(function (response) {
+        return response;
       });
+      return this.result;
     }
   }]);
 

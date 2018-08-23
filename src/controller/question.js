@@ -22,12 +22,22 @@ export default class QuestionController {
     });
   }
 
-  getQuestion(id, next) {
+  getQuestion(id, response, next) {
     if (Number.isNaN(Number(id))) {
       return next(new ErrorHandler('Invalid Request', 400));
     }
-    const data = this.findQuestion(id);
-    return (data) || next(new ErrorHandler('Resource Not Found', 404));
+    pool.connect((err, client, done) => {
+      client.query('SELECT * FROM questions WHERE id = $1', [id], (error, res) => {
+        if (res.rowCount < 1) {
+          return next(new ErrorHandler('Resource Not Found', 404));
+        }
+        client.query('SELECT * FROM answers WHERE question_id = $1', [res.rows[0].id], (error, reso) => {
+          done();
+          res.rows[0].answers = reso.rows;
+          return response.status(200).json(res.rows[0]);
+        });
+      });
+    });
   }
 
   addQuestion(title, context, response) {

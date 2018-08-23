@@ -50,12 +50,22 @@ var QuestionController = function () {
     }
   }, {
     key: 'getQuestion',
-    value: function getQuestion(id, next) {
+    value: function getQuestion(id, response, next) {
       if (Number.isNaN(Number(id))) {
         return next(new _error2.default('Invalid Request', 400));
       }
-      var data = this.findQuestion(id);
-      return data || next(new _error2.default('Resource Not Found', 404));
+      _dbconnect2.default.connect(function (err, client, done) {
+        client.query('SELECT * FROM questions WHERE id = $1', [id], function (error, res) {
+          done();
+          if (res.rowCount < 1) {
+            return next(new _error2.default('Resource Not Found', 404));
+          }
+          client.query('SELECT * FROM answers WHERE question_id = $1', [res.rows[0].id], function (error, reso) {
+            res.rows[0].answers = reso.rows;
+            return response.status(200).json(res.rows[0]);
+          });
+        });
+      });
     }
   }, {
     key: 'addQuestion',

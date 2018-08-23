@@ -79,25 +79,6 @@ var AnswerController = function () {
         createdAt: createdAt
       };
     }
-  }, {
-    key: 'findQuestion',
-    value: function findQuestion(id) {
-      return this.store.find(function (item) {
-        return item.id === parseInt(id, 10);
-      });
-    }
-  }, {
-    key: 'getId',
-    value: function getId() {
-      return this.activeQuestion.answers.length + 1;
-    }
-  }, {
-    key: 'checkAnswerId',
-    value: function checkAnswerId(id) {
-      return this.activeQuestion.answers.some(function (item) {
-        return item.id === id;
-      });
-    }
   }]);
 
   return AnswerController;

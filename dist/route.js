@@ -45,7 +45,7 @@ router.get('/:id', function (request, response, next) {
   var id = request.params.id;
 
   var question = new _question2.default();
-  return response.status(200).json(question.getQuestion(id, next));
+  return question.getQuestion(id, response, next);
 });
 
 router.put('/:id', function (request, response, next) {

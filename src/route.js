@@ -23,7 +23,7 @@ router.post('/', (request, response, next) => {
 router.get('/:id', (request, response, next) => {
   const { id } = request.params;
   const question = new QuestionController();
-  return response.status(200).json(question.getQuestion(id, next));
+  return question.getQuestion(id, response, next);
 });
 
 router.put('/:id', (request, response, next) => {

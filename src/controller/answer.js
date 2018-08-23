@@ -50,16 +50,4 @@ export default class AnswerController {
       createdAt,
     };
   }
-
-  findQuestion(id) {
-    return this.store.find(item => item.id === parseInt(id, 10));
-  }
-
-  getId() {
-    return (this.activeQuestion.answers.length + 1);
-  }
-
-  checkAnswerId(id) {
-    return this.activeQuestion.answers.some(item => item.id === id);
-  }
 }

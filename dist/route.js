@@ -26,7 +26,7 @@ var router = _express2.default.Router();
 
 router.get('/', function (request, response) {
   var question = new _question2.default();
-  response.status(200).json(question.getAllQuestions());
+  return question.getAllQuestions(response);
 });
 
 router.post('/', function (request, response, next) {

@@ -36,8 +36,17 @@ var QuestionController = function () {
 
   _createClass(QuestionController, [{
     key: 'getAllQuestions',
-    value: function getAllQuestions() {
-      return this.store;
+    value: function getAllQuestions(response) {
+      _dbconnect2.default.connect(function (err, client, done) {
+        if (err) throw err;
+        client.query('SELECT * FROM questions', function (error, res) {
+          done();
+          if (error) {
+            console.log(error.stack);
+          }
+          return response.status(200).json(res.rows);
+        });
+      });
     }
   }, {
     key: 'getQuestion',
@@ -102,7 +111,7 @@ var QuestionController = function () {
   }, {
     key: 'runQuery',
     value: function runQuery(query, response) {
-      var date = new _date2.default();
+      // const date = new DateTime();
       _dbconnect2.default.connect(function (err, client, done) {
         if (err) throw err;
         client.query(query, function (error, res) {

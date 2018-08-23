@@ -9,8 +9,17 @@ export default class QuestionController {
     this.activeQuestion = null;
   }
 
-  getAllQuestions() {
-    return this.store;
+  getAllQuestions(response) {
+    pool.connect((err, client, done) => {
+      if (err) throw err;
+      client.query('SELECT * FROM questions', (error, res) => {
+        done();
+        if (error) {
+          console.log(error.stack);
+        }
+        return response.status(200).json(res.rows);
+      });
+    });
   }
 
   getQuestion(id, next) {

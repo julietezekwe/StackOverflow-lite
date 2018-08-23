@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', (request, response) => {
   const question = new QuestionController();
-  response.status(200).json(question.getAllQuestions());
+  return question.getAllQuestions(response);
 });
 
 router.post('/', (request, response, next) => {

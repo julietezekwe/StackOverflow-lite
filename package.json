@@ -7,7 +7,7 @@
     "build": "babel src -d dist",
     "lint": "eslint ./src",
     "start": "node dist/app",
-    "migration": "node dist/migration",
+    "migration": "node dist/db/migration",
     "test": "mocha --require babel-core/register --recursive",
     "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha --recursive",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"

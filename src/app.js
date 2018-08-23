@@ -1,5 +1,6 @@
 import express from 'express';
 import router from './route';
+import auth from './auth';
 
 const app = express();
 const baseUrl = '/api/v1/questions';
@@ -11,6 +12,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/v1/auth', auth);
 app.use(baseUrl, router);
 
 app.use((req, res, next) => {

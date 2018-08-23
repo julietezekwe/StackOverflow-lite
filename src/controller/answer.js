@@ -1,4 +1,5 @@
 import store from '../model/store';
+import pool from '../dbconnect';
 import ErrorHandler from './error';
 import DateTime from './date';
 
@@ -12,13 +13,19 @@ export default class AnswerController {
     if (Number.isNaN(Number(id))) {
       return next(new ErrorHandler('Invalid Request', 400));
     }
-    this.activeQuestion = this.findQuestion(id);
-    if (!this.activeQuestion) {
-      return next(new ErrorHandler('Resource Not Found', 404));
-    }
-    const data = this.createAnswerObject(answer);
-    this.activeQuestion.answers.push(data);
-    return response.status(201).json(data);
+    pool.connect((err, client, done) => {
+      if (err) throw err;
+      client.query('SELECT * FROM questions WHERE id = $1', [id], (error, res) => {
+        if (res.rowCount > 0) {
+          client.query('INSERT INTO answers(answer, question_id) VALUES($1, $2) RETURNING *', [answer, id], (erro, reso) => {
+            done();
+            return response.status(201).json(reso.rows[0]);
+          });
+        } else {
+          return next(new ErrorHandler('Resource Not Found', 404));
+        }
+      });
+    });
   }
 
   acceptAnswer(id, answerId, response, next) {

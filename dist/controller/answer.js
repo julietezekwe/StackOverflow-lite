@@ -10,6 +10,10 @@ var _store = require('../model/store');
 
 var _store2 = _interopRequireDefault(_store);
 
+var _dbconnect = require('../dbconnect');
+
+var _dbconnect2 = _interopRequireDefault(_dbconnect);
+
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
@@ -36,13 +40,19 @@ var AnswerController = function () {
       if (Number.isNaN(Number(id))) {
         return next(new _error2.default('Invalid Request', 400));
       }
-      this.activeQuestion = this.findQuestion(id);
-      if (!this.activeQuestion) {
-        return next(new _error2.default('Resource Not Found', 404));
-      }
-      var data = this.createAnswerObject(answer);
-      this.activeQuestion.answers.push(data);
-      return response.status(201).json(data);
+      _dbconnect2.default.connect(function (err, client, done) {
+        if (err) throw err;
+        client.query('SELECT * FROM questions WHERE id = $1', [id], function (error, res) {
+          if (res.rowCount > 0) {
+            client.query('INSERT INTO answers(answer, question_id) VALUES($1, $2) RETURNING *', [answer, id], function (erro, reso) {
+              done();
+              return response.status(201).json(reso.rows[0]);
+            });
+          } else {
+            return next(new _error2.default('Resource Not Found', 404));
+          }
+        });
+      });
     }
   }, {
     key: 'acceptAnswer',

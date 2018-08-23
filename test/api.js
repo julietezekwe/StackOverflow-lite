@@ -6,6 +6,16 @@ const should = chai.should();
 
 describe('Test api requests', () => {
   describe('Test question routes', () => {
+    describe('Fetch question', () => {
+      it('respond with json containing list of all questions', () => {
+        request(app).get('/api/v1/questions')
+          .end((err, res) => {
+            res.should.have.property('status', 200);
+            res.body.should.be.a('array');
+            res.body[0].should.have.all.keys('id', 'title', 'context', 'user_id');
+          });
+      });
+    });
     describe('Add a question', () => {
       it('respond with json containing question added', () => {
         request(app).post('/api/v1/questions')

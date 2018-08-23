@@ -11,6 +11,6 @@ before_script:
   - psql -c "create database stackoverflow;" -U postgres
   - npm run build
   - npm run migration
-  - node dist/seed
+  - node dist/db/seed
 after_success:
   - npm run coveralls

@@ -43,6 +43,28 @@ export default class QuestionController {
     this.runQuery(query).then(data => response.status(201).json(data.rows[0]));
   }
 
+  deleteQuestion(id, user, response, next) {
+    if (Number.isNaN(Number(id))) {
+      return next(new ErrorHandler('Invalid Request', 400));
+    }
+    let query = {
+      text: 'SELECT * FROM questions WHERE id = $1 AND user_id = $2',
+      values: [id, user.id],
+    };
+    return this.runQuery(query).then((data) => {
+      if (data.rowCount < 1) {
+        return next(new ErrorHandler('Question not found or Unauthorized action', 401));
+      }
+      query = {
+        text: 'DELETE FROM questions WHERE id = $1',
+        values: [id],
+      };
+      return this.runQuery(query).then(() => {
+        return this.result.then(() => response.status(200).json({}));
+      });
+    });
+  }
+
   runQuery(query) {
     this.result = pool.query(query).then(response => response);
     return this.result;

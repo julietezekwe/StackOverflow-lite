@@ -76,6 +76,33 @@ var QuestionController = function () {
       });
     }
   }, {
+    key: 'deleteQuestion',
+    value: function deleteQuestion(id, user, response, next) {
+      var _this2 = this;
+
+      if (Number.isNaN(Number(id))) {
+        return next(new _error2.default('Invalid Request', 400));
+      }
+      var query = {
+        text: 'SELECT * FROM questions WHERE id = $1 AND user_id = $2',
+        values: [id, user.id]
+      };
+      return this.runQuery(query).then(function (data) {
+        if (data.rowCount < 1) {
+          return next(new _error2.default('Question not found or Unauthorized action', 401));
+        }
+        query = {
+          text: 'DELETE FROM questions WHERE id = $1',
+          values: [id]
+        };
+        return _this2.runQuery(query).then(function () {
+          return _this2.result.then(function () {
+            return response.status(200).json({});
+          });
+        });
+      });
+    }
+  }, {
     key: 'runQuery',
     value: function runQuery(query) {
       this.result = _dbconnect2.default.query(query).then(function (response) {

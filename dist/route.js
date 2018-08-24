@@ -51,6 +51,8 @@ router.post('/', checkToken, function (request, response, next) {
       title = _request$body.title,
       context = _request$body.context;
 
+  title = title.trim().replace(/\s+/g, ' ');
+  context = context.trim().replace(/\s+/g, ' ');
   if (!title || !context) {
     return next(new _error2.default('Invalid Request', 400));
   }
@@ -65,24 +67,15 @@ router.get('/:id', function (request, response, next) {
   return question.getQuestion(id, response, next);
 });
 
-router.put('/:id', function (request, response, next) {
-  var id = request.params.id;
-  var _request$body2 = request.body,
-      title = _request$body2.title,
-      context = _request$body2.context;
-
-  if (!title || !context) {
-    return next(new _error2.default('Invalid Request', 400));
+router.delete('/:id', checkToken, function (request, response, next) {
+  var result = (0, _jwt.verifyToken)(request.token);
+  if (!result.status) {
+    return next(new _error2.default(result.data, 400));
   }
-  var question = new _question2.default();
-  return question.updateQuestion(id, title, context, response, next);
-});
-
-router.delete('/:id', function (request, response, next) {
   var id = request.params.id;
 
   var question = new _question2.default();
-  return question.deleteQuestion(id, response, next);
+  return question.deleteQuestion(id, result.data, response, next);
 });
 
 router.post('/:id/answers', checkToken, function (request, response, next) {
@@ -93,6 +86,7 @@ router.post('/:id/answers', checkToken, function (request, response, next) {
   var id = request.params.id;
   var input = request.body.answer;
 
+  input = input.trim().replace(/\s+/g, ' ');
   if (!input) {
     return next(new _error2.default('Invalid Request', 400));
   }

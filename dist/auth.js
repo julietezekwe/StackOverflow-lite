@@ -29,6 +29,7 @@ router.post('/login', function (request, response, next) {
       email = _request$body.email,
       password = _request$body.password;
 
+  email = email.trim().replace(/\s+/g, ' ');
   if (!email || !password) {
     return next(new _error2.default('Invalid Request', 400));
   }
@@ -42,6 +43,8 @@ router.post('/signup', function (request, response, next) {
       email = _request$body2.email,
       password = _request$body2.password;
 
+  name = name.trim().replace(/\s+/g, ' ');
+  email = email.trim().replace(/\s+/g, ' ');
   if (!name || !email || !password) {
     return next(new _error2.default('Invalid Request', 400));
   }

@@ -1,23 +1,38 @@
 import express from 'express';
+import { getToken, verifyToken } from './jwt';
 import QuestionController from './controller/question';
 import AnswerController from './controller/answer';
 import ErrorHandler from './controller/error';
 
 const router = express.Router();
-
+const checkToken = (request, response, next) => {
+  const bearer = request.headers.authorization;
+  const token = getToken(bearer);
+  if (!token) {
+    const err = new Error('Access denied, token required');
+    err.status = 403;
+    next(err);
+  }
+  request.token = token;
+  next();
+};
 
 router.get('/', (request, response) => {
   const question = new QuestionController();
   return question.getAllQuestions(response);
 });
 
-router.post('/', (request, response, next) => {
+router.post('/', checkToken, (request, response, next) => {
+  const result = verifyToken(request.token);
+  if (!result.status) {
+    return next(new ErrorHandler(result.data, 400));
+  }
   const { title, context } = request.body;
   if (!title || !context) {
     return next(new ErrorHandler('Invalid Request', 400));
   }
   const question = new QuestionController();
-  return question.addQuestion(title, context, response);
+  return question.addQuestion(title, context, result.data, response);
 });
 
 router.get('/:id', (request, response, next) => {
@@ -26,40 +41,24 @@ router.get('/:id', (request, response, next) => {
   return question.getQuestion(id, response, next);
 });
 
-router.put('/:id', (request, response, next) => {
-  const { id } = request.params;
-  const { title, context } = request.body;
-  if (!title || !context) {
-    return next(new ErrorHandler('Invalid Request', 400));
-  }
-  const question = new QuestionController();
-  return question.updateQuestion(id, title, context, response, next);
-});
-
 router.delete('/:id', (request, response, next) => {
   const { id } = request.params;
   const question = new QuestionController();
   return question.deleteQuestion(id, response, next);
 });
 
-router.post('/:id/answers', (request, response, next) => {
+router.post('/:id/answers', checkToken, (request, response, next) => {
+  const result = verifyToken(request.token);
+  if (!result.status) {
+    return next(new ErrorHandler(result.data, 400));
+  }
   const { id } = request.params;
   const { answer: input } = request.body;
   if (!input) {
     return next(new ErrorHandler('Invalid Request', 400));
   }
   const answer = new AnswerController();
-  return answer.addAnswer(id, input, response, next);
-});
-
-router.post('/:id/answers/accept', (request, response, next) => {
-  const { id } = request.params;
-  const { answer_id: answerId } = request.body;
-  if (!id || !answerId) {
-    return next(new ErrorHandler('Invalid Request', 400));
-  }
-  const answer = new AnswerController();
-  return answer.acceptAnswer(id, answerId, response, next);
+  return answer.addAnswer(id, result.data, input, response, next);
 });
 
 export default router;

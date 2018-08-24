@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import pool from '../db/dbconnect';
 import ErrorHandler from './error';
+import { secret } from '../jwt';
 
 export default class LoginController {
   login(userEmail, password, response, next) {
@@ -15,7 +17,9 @@ export default class LoginController {
             return next(new ErrorHandler('Incorect Password', 404));
           }
           const { id, name, email } = data.rows[0];
-          return response.status(200).json({ status: 'success', data: { id, name, email } });
+          jwt.sign({ id, name, email }, secret, { expiresIn: '10m' }, (err, token) => response.status(200).json({
+            data: { id, name, email }, token,
+          }));
         });
       }
       return next(new ErrorHandler('Email not found', 404));

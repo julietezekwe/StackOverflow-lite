@@ -66,10 +66,10 @@ var QuestionController = function () {
     }
   }, {
     key: 'addQuestion',
-    value: function addQuestion(title, context, response) {
+    value: function addQuestion(title, context, user, response) {
       var query = {
         text: 'INSERT INTO questions(title, context, user_id) VALUES($1, $2, $3) RETURNING *',
-        values: [title, context, 1]
+        values: [title, context, user.id]
       };
       this.runQuery(query).then(function (data) {
         return response.status(201).json(data.rows[0]);

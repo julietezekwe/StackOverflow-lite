@@ -25,23 +25,23 @@ var AnswerController = function () {
 
   _createClass(AnswerController, [{
     key: 'addAnswer',
-    value: function addAnswer(id, answer, response, next) {
+    value: function addAnswer(quesId, user, answer, response, next) {
       var _this = this;
 
-      if (Number.isNaN(Number(id))) {
+      if (Number.isNaN(Number(quesId))) {
         return next(new _error2.default('Invalid Request', 400));
       }
       var query = {
         text: 'SELECT * FROM questions WHERE id = $1',
-        values: [id]
+        values: [quesId]
       };
       this.result = this.runQuery(query).then(function (data) {
         if (data.rowCount < 1) {
           return next(new _error2.default('Resource Not Found', 404));
         }
         query = {
-          text: 'INSERT INTO answers(answer, question_id) VALUES($1, $2) RETURNING id, answer',
-          values: [answer, id]
+          text: 'INSERT INTO answers(answer, question_id, user_id) VALUES($1, $2, $3) RETURNING id, answer, user_id',
+          values: [answer, quesId, user.id]
         };
         return _this.runQuery(query).then(function (object) {
           return object.rows[0];

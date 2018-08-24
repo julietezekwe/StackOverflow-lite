@@ -2,21 +2,21 @@ import pool from '../db/dbconnect';
 import ErrorHandler from './error';
 
 export default class AnswerController {
-  addAnswer(id, answer, response, next) {
-    if (Number.isNaN(Number(id))) {
+  addAnswer(quesId, user, answer, response, next) {
+    if (Number.isNaN(Number(quesId))) {
       return next(new ErrorHandler('Invalid Request', 400));
     }
     let query = {
       text: 'SELECT * FROM questions WHERE id = $1',
-      values: [id],
+      values: [quesId],
     };
     this.result = this.runQuery(query).then((data) => {
       if (data.rowCount < 1) {
         return next(new ErrorHandler('Resource Not Found', 404));
       }
       query = {
-        text: 'INSERT INTO answers(answer, question_id) VALUES($1, $2) RETURNING id, answer',
-        values: [answer, id],
+        text: 'INSERT INTO answers(answer, question_id, user_id) VALUES($1, $2, $3) RETURNING id, answer, user_id',
+        values: [answer, quesId, user.id],
       };
       return this.runQuery(query).then(object => object.rows[0]);
     });

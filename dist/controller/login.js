@@ -10,6 +10,10 @@ var _bcrypt = require('bcrypt');
 
 var _bcrypt2 = _interopRequireDefault(_bcrypt);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 var _dbconnect = require('../db/dbconnect');
 
 var _dbconnect2 = _interopRequireDefault(_dbconnect);
@@ -17,6 +21,8 @@ var _dbconnect2 = _interopRequireDefault(_dbconnect);
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
+
+var _jwt = require('../jwt');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45,7 +51,11 @@ var LoginController = function () {
                 name = _data$rows$.name,
                 email = _data$rows$.email;
 
-            return response.status(200).json({ status: 'success', data: { id: id, name: name, email: email } });
+            _jsonwebtoken2.default.sign({ id: id, name: name, email: email }, _jwt.secret, { expiresIn: '10m' }, function (err, token) {
+              return response.status(200).json({
+                data: { id: id, name: name, email: email }, token: token
+              });
+            });
           });
         }
         return next(new _error2.default('Email not found', 404));

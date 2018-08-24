@@ -52,7 +52,7 @@ var RegisterController = function () {
             return response.status(201).json({ status: 'success', data: obj });
           });
         }
-        return next(new _error2.default('Email already in use', 404));
+        return next(new _error2.default('Email already in use', 400));
       });
     }
   }, {

@@ -22,7 +22,7 @@ export default class RegisterController {
           return this.runQuery(query).then(object => object.rows[0]);
         }).then(obj => response.status(201).json({ status: 'success', data: obj }));
       }
-      return next(new ErrorHandler('Email already in use', 404));
+      return next(new ErrorHandler('Email already in use', 400));
     });
   }
 

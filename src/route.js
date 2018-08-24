@@ -27,7 +27,9 @@ router.post('/', checkToken, (request, response, next) => {
   if (!result.status) {
     return next(new ErrorHandler(result.data, 400));
   }
-  const { title, context } = request.body;
+  let { title, context } = request.body;
+  title = title.trim().replace(/\s+/g, ' ');
+  context = context.trim().replace(/\s+/g, ' ');
   if (!title || !context) {
     return next(new ErrorHandler('Invalid Request', 400));
   }
@@ -41,10 +43,14 @@ router.get('/:id', (request, response, next) => {
   return question.getQuestion(id, response, next);
 });
 
-router.delete('/:id', (request, response, next) => {
+router.delete('/:id', checkToken, (request, response, next) => {
+  const result = verifyToken(request.token);
+  if (!result.status) {
+    return next(new ErrorHandler(result.data, 400));
+  }
   const { id } = request.params;
   const question = new QuestionController();
-  return question.deleteQuestion(id, response, next);
+  return question.deleteQuestion(id, result.data, response, next);
 });
 
 router.post('/:id/answers', checkToken, (request, response, next) => {
@@ -53,7 +59,8 @@ router.post('/:id/answers', checkToken, (request, response, next) => {
     return next(new ErrorHandler(result.data, 400));
   }
   const { id } = request.params;
-  const { answer: input } = request.body;
+  let { answer: input } = request.body;
+  input = input.trim().replace(/\s+/g, ' ');
   if (!input) {
     return next(new ErrorHandler('Invalid Request', 400));
   }

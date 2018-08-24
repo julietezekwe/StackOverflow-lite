@@ -6,7 +6,8 @@ import RegisterController from './controller/register';
 const router = express.Router();
 
 router.post('/login', (request, response, next) => {
-  const { email, password } = request.body;
+  let { email, password } = request.body;
+  email = email.trim().replace(/\s+/g, ' ');
   if (!email || !password) {
     return next(new ErrorHandler('Invalid Request', 400));
   }
@@ -15,7 +16,9 @@ router.post('/login', (request, response, next) => {
 });
 
 router.post('/signup', (request, response, next) => {
-  const { name, email, password } = request.body;
+  let { name, email, password } = request.body;
+  name = name.trim().replace(/\s+/g, ' ');
+  email = email.trim().replace(/\s+/g, ' ');
   if (!name || !email || !password) {
     return next(new ErrorHandler('Invalid Request', 400));
   }

@@ -7,6 +7,9 @@ const router = express.Router();
 
 router.post('/login', (request, response, next) => {
   let { email, password } = request.body;
+  if (!email || !password) {
+    return next(new ErrorHandler('Invalid Request', 400));
+  }
   email = email.trim().replace(/\s+/g, ' ');
   if (!email || !password) {
     return next(new ErrorHandler('Invalid Request', 400));
@@ -17,6 +20,9 @@ router.post('/login', (request, response, next) => {
 
 router.post('/signup', (request, response, next) => {
   let { name, email, password } = request.body;
+  if (!name || !email || !password) {
+    return next(new ErrorHandler('Invalid Request', 400));
+  }
   name = name.trim().replace(/\s+/g, ' ');
   email = email.trim().replace(/\s+/g, ' ');
   if (!name || !email || !password) {

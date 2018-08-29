@@ -10,6 +10,10 @@ var _bcrypt = require('bcrypt');
 
 var _bcrypt2 = _interopRequireDefault(_bcrypt);
 
+var _jsonwebtoken = require('jsonwebtoken');
+
+var _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);
+
 var _dbconnect = require('../db/dbconnect');
 
 var _dbconnect2 = _interopRequireDefault(_dbconnect);
@@ -17,6 +21,8 @@ var _dbconnect2 = _interopRequireDefault(_dbconnect);
 var _error = require('./error');
 
 var _error2 = _interopRequireDefault(_error);
+
+var _jwt = require('../jwt');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42,14 +48,20 @@ var RegisterController = function () {
         if (data.rowCount < 1) {
           return _bcrypt2.default.hash(password, _this.saltRounds).then(function (hash) {
             query = {
-              text: 'INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING name, email',
+              text: 'INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id, name, email',
               values: [name, email, hash]
             };
             return _this.runQuery(query).then(function (object) {
               return object.rows[0];
             });
           }).then(function (obj) {
-            return response.status(201).json({ status: 'success', data: obj });
+            _jsonwebtoken2.default.sign(obj, _jwt.secret, { expiresIn: '10m' }, function (err, token) {
+              return response.status(201).json({
+                status: true,
+                data: obj,
+                token: token
+              });
+            });
           });
         }
         return next(new _error2.default('Email already in use', 400));

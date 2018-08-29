@@ -29,7 +29,7 @@ var checkToken = function checkToken(request, response, next) {
   var bearer = request.headers.authorization;
   var token = (0, _jwt.getToken)(bearer);
   if (!token) {
-    var err = new Error('Access denied, token required');
+    var err = new Error('Action not authorized');
     err.status = 403;
     next(err);
   }
@@ -51,10 +51,13 @@ router.post('/', checkToken, function (request, response, next) {
       title = _request$body.title,
       context = _request$body.context;
 
+  if (!title || !context) {
+    return next(new _error2.default('Title and context keys are required', 400));
+  }
   title = title.trim().replace(/\s+/g, ' ');
   context = context.trim().replace(/\s+/g, ' ');
   if (!title || !context) {
-    return next(new _error2.default('Invalid Request', 400));
+    return next(new _error2.default('Title and context fields are required', 400));
   }
   var question = new _question2.default();
   return question.addQuestion(title, context, result.data, response);
@@ -83,12 +86,16 @@ router.post('/:id/answers', checkToken, function (request, response, next) {
   if (!result.status) {
     return next(new _error2.default(result.data, 400));
   }
-  var id = request.params.id;
   var input = request.body.answer;
+
+  if (!input) {
+    return next(new _error2.default('Answer key is required', 400));
+  }
+  var id = request.params.id;
 
   input = input.trim().replace(/\s+/g, ' ');
   if (!input) {
-    return next(new _error2.default('Invalid Request', 400));
+    return next(new _error2.default('Answer field is required', 400));
   }
   var answer = new _answer2.default();
   return answer.addAnswer(id, result.data, input, response, next);

@@ -48,19 +48,22 @@ export default class QuestionController {
       return next(new ErrorHandler('Invalid Request', 400));
     }
     let query = {
-      text: 'SELECT * FROM questions WHERE id = $1 AND user_id = $2',
-      values: [id, user.id],
+      text: 'SELECT * FROM questions WHERE id = $1',
+      values: [id],
     };
     return this.runQuery(query).then((data) => {
       if (data.rowCount < 1) {
-        return next(new ErrorHandler('Question not found or Unauthorized action', 401));
+        return next(new ErrorHandler('Question not found', 404));
+      }
+      if (data.rows[0].user_id !== user.id) {
+        return next(new ErrorHandler('Unauthorized action', 403));
       }
       query = {
         text: 'DELETE FROM questions WHERE id = $1',
         values: [id],
       };
       return this.runQuery(query).then(() => {
-        return this.result.then(() => response.status(200).json({}));
+        return this.result.then(() => response.status(200).json({status: true, message: 'Question successful'}));
       });
     });
   }

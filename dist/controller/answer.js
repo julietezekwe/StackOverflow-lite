@@ -35,20 +35,20 @@ var AnswerController = function () {
         text: 'SELECT * FROM questions WHERE id = $1',
         values: [quesId]
       };
-      this.result = this.runQuery(query).then(function (data) {
+      return this.runQuery(query).then(function (data) {
         if (data.rowCount < 1) {
           return next(new _error2.default('Resource Not Found', 404));
+        }
+        if (data.rows[0].user_id === user.id) {
+          return next(new _error2.default('You cannot answer your question', 400));
         }
         query = {
           text: 'INSERT INTO answers(answer, question_id, user_id) VALUES($1, $2, $3) RETURNING id, answer, user_id',
           values: [answer, quesId, user.id]
         };
         return _this.runQuery(query).then(function (object) {
-          return object.rows[0];
+          return response.status(201).json(object.rows[0]);
         });
-      });
-      return this.result.then(function (data) {
-        return response.status(201).json(data);
       });
     }
   }, {

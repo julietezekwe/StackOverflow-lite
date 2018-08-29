@@ -10,17 +10,19 @@ export default class AnswerController {
       text: 'SELECT * FROM questions WHERE id = $1',
       values: [quesId],
     };
-    this.result = this.runQuery(query).then((data) => {
+    return this.runQuery(query).then((data) => {
       if (data.rowCount < 1) {
         return next(new ErrorHandler('Resource Not Found', 404));
+      }
+      if (data.rows[0].user_id === user.id) {
+        return next(new ErrorHandler('You cannot answer your question', 400));
       }
       query = {
         text: 'INSERT INTO answers(answer, question_id, user_id) VALUES($1, $2, $3) RETURNING id, answer, user_id',
         values: [answer, quesId, user.id],
       };
-      return this.runQuery(query).then(object => object.rows[0]);
+      return this.runQuery(query).then(object => response.status(201).json(object.rows[0]));
     });
-    return this.result.then(data => response.status(201).json(data));
   }
 
   runQuery(query) {

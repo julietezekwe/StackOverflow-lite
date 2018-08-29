@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import pool from '../db/dbconnect';
 import ErrorHandler from './error';
+import { secret } from '../jwt';
 
 export default class RegisterController {
   constructor() {
@@ -16,13 +18,19 @@ export default class RegisterController {
       if (data.rowCount < 1) {
         return bcrypt.hash(password, this.saltRounds).then((hash) => {
           query = {
-            text: 'INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING name, email',
+            text: 'INSERT INTO users(name, email, password) VALUES($1, $2, $3) RETURNING id, name, email',
             values: [name, email, hash],
           };
           return this.runQuery(query).then(object => object.rows[0]);
-        }).then(obj => response.status(201).json({ status: 'success', data: obj }));
+        }).then((obj) => {
+          jwt.sign(obj, secret, { expiresIn: '10m' }, (err, token) => response.status(201).json({
+            status: true,
+            data: obj,
+            token,
+          }));
+        });
       }
-      return next(new ErrorHandler('Email already in use', 404));
+      return next(new ErrorHandler('Email already in use', 400));
     });
   }
 

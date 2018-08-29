@@ -8,8 +8,8 @@
     "lint": "eslint ./src",
     "start": "node dist/app",
     "migration": "node dist/db/migration",
-    "test": "mocha --require babel-core/register --recursive",
-    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha --recursive",
+    "test": "mocha --require babel-core/register --recursive --timeout=1000",
+    "cover": "babel-node ./node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha --recursive --timeout=1000",
     "coveralls": "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
   },
   "repository": {
